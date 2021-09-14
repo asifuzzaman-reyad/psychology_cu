@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:psychology_cu/constants.dart';
 import 'screen/auth/login_screen.dart';
 import 'screen/dashboard/dashboard_screen.dart';
-
 
 class SplashScreen extends StatefulWidget {
   static const routeName = 'splash_screen';
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     var user = FirebaseAuth.instance.currentUser;
 
     Timer(
-      Duration(seconds: 1),
+      Duration(seconds: 2),
       () => Navigator.pushReplacementNamed(context,
           user != null ? DashboardScreen.routeName : LoginScreen.routeName),
     );
@@ -35,11 +35,23 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FlutterLogo(
-                size: 48,
+              Spacer(),
+              Image.asset('assets/logo/psycho_logo.png', height: 88, width: 88),
+              Spacer(),
+              Text(
+                kDepartmentName,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                ),
               ),
+              SizedBox(height: 4),
+              Text(kUniversityName,
+                  style: TextStyle(
+                    fontSize: 14,
+                  )),
               SizedBox(height: 32),
-              CupertinoActivityIndicator(),
             ],
           ),
         ),

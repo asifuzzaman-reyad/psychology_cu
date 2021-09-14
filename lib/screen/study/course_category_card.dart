@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:psychology_cu/screen/study/upload/screen/edit_pdf_information.dart';
-import 'package:psychology_cu/screen/study/upload/models/courses.dart';
 
 import 'components/pdf_view_screen.dart';
+import 'models/courses.dart';
 
 class CourseCategoryCard extends StatefulWidget {
   CourseCategoryCard({
@@ -40,148 +38,102 @@ class _CourseCategoryCardState extends State<CourseCategoryCard> {
               fileUrl: document.get('fileUrl'));
 
           return GestureDetector(
-            onLongPress: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                          title: Text('Manage File'),
-                          content:
-                              Text('Be sure before delete or edit any file'),
-                          actions: [
-
-                            //cancel
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Cancel')),
-
-                            // delete
-                            TextButton(
-                                onPressed: () {
-                                  widget.ref!
-                                      .doc(document.id)
-                                      .delete()
-                                      .then((_) {
-                                    Fluttertoast.cancel();
-                                    Fluttertoast.showToast(
-                                        msg: 'Delete successfully');
-                                    print("delete successful!");
-                                    Navigator.pop(context);
-                                  });
-                                },
-                                child: Text('Delete')),
-
-                            //
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => EditPdfInformation(
-                                                title: courses.title,
-                                                subTitle: courses.subtitle,
-                                                ref: widget.ref,
-                                                documentId:document.id
-                                              )));
-                                },
-                                child: Text('Edit')),
-                          ]));
-            },
-            child: Container(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 6,
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Title',
-                    style: TextStyle(fontSize: 12, color: Colors.black38),
-                  ),
-                  Flexible(
-                    child: Text(
-                      courses.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PdfViewScreen(
+                      fileUrl: courses.fileUrl,
+                      title: courses.title),
+                )),
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              margin: EdgeInsets.zero,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(12, 12, 12, 8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Title',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Flexible(
+                      child: Text(
+                        courses.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    widget.subtitle,
-                    style: TextStyle(fontSize: 12, color: Colors.black38),
-                  ),
-                  Flexible(
-                    child: Text(
-                      courses.subtitle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    SizedBox(height: 8),
+                    Text(
+                      widget.subtitle,
+                      style: TextStyle(fontSize: 12),
+                    ),
+                    Flexible(
+                      child: Text(
+                        courses.subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
 
-                  SizedBox(height: 8),
-                  //
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    SizedBox(height: 8),
+                    //
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
 // time
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Upload Date',
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.black38)),
-                          Text(courses.date,
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.black87)),
-                          SizedBox(height: 8)
-                        ],
-                      ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Upload Date',
+                                style: TextStyle(
+                                    fontSize: 11)),
+                            Text(courses.date,
+                                style: TextStyle(
+                                    fontSize: 13)),
+                            SizedBox(height: 8)
+                          ],
+                        ),
 
-                      // buttons
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          //
-                          MaterialButton(
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PdfViewScreen(
-                                      fileUrl: courses.fileUrl,
-                                      title: courses.title),
-                                )),
-                            child: Text(
-                              'Read',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
+                        // buttons
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            //
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                              onPressed: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PdfViewScreen(
+                                        fileUrl: courses.fileUrl,
+                                        title: courses.title),
+                                  )),
+                              child: Text(
+                                'Read',
+                                style:
+                                    TextStyle(color: Colors.white, fontSize: 16),
+                              ),
+                              color: Colors.green,
                             ),
-                            color: Colors.green,
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           );

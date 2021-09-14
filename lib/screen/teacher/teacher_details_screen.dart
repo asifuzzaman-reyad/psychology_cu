@@ -16,16 +16,15 @@ class TeacherDetailsScreen extends StatelessWidget {
       body: SafeArea(
         child: Scaffold(
           extendBodyBehindAppBar: true,
-          backgroundColor: Colors.grey.shade100,
+          // backgroundColor: Colors.grey.shade100,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
           ),
 
-          //
+
           body: Column(
             children: [
-
               //image
               Expanded(
                 flex: 3,
@@ -50,9 +49,8 @@ class TeacherDetailsScreen extends StatelessWidget {
               Expanded(
                 flex: 4,
                 child: Container(
-                  width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 8)],
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(24),
@@ -60,170 +58,134 @@ class TeacherDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   padding:
-                      EdgeInsets.only(bottom: 16, left: 16, right: 16, top: 24),
+                  EdgeInsets.only(bottom: 16, left: 16, right: 16, top: 24),
                   child: Container(
-                    child: Flexible(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                argument.get('name'),
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                argument.get('post'),
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                argument.get('phd') != ''
-                                    ? argument.get('phd')
-                                    : '',
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                              ),
-                              Divider(height: 24),
-                              Text(
-                                "Mobile: ",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w800),
-                              ),
-                              SizedBox(height: 4),
-                              SelectableText(
-                                argument.get('mobile'),
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "Email: ",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w800),
-                              ),
-                              SizedBox(height: 4),
-                              SelectableText(
-                                argument.get('email'),
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                              ),
-                              Divider(height: 24),
-                              Text(
-                                "Field of Interest: ",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w800),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                argument.get('interest'),
-                                style: TextStyle(fontWeight: FontWeight.w300),
-                              ),
-                            ],
-                          ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              argument.get('name'),
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              argument.get('post'),
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              argument.get('phd') != ''
+                                  ? argument.get('phd')
+                                  : '',
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                            Divider(height: 24),
+                            Text(
+                              "Mobile: ",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w800),
+                            ),
+                            SizedBox(height: 4),
+                            SelectableText(
+                              argument.get('mobile'),
+                              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300),
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                              "Email: ",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w800),
+                            ),
+                            SizedBox(height: 4),
+                            SelectableText(
+                              argument.get('email'),
+                              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300),
+                            ),
+                            Divider(height: 24),
+                            Text(
+                              "Field of Interest: ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w800),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              argument.get('interest'),
+                              style: TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ],
+                        ),
 
-                          //
-                          SizedBox(height: 16),
+                        //
+                        SizedBox(height: 16),
 
-                          //
-                          Row(
-                            children: [
-                              //publication
-                              Expanded(
-                                child: argument.get('publication') == ''
-                                    ? Text('')
-                                    : MaterialButton(
-                                      onPressed: () async{
-                                        final url = argument.get('publication');
-                                        //
-                                              if (argument.get('publication') != '') {
-                                                if (await canLaunch(url)) {
-                                                  await launch(url);
-                                                }
-                                              } else {
-                                                print('no publication found');
-                                              }
-                                      },
-                                      color: Colors.black,
-                                      padding: EdgeInsets.symmetric(vertical: 13),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                      child: Text(
-                                        "Publication",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
+                        //
+                        Row(
+                          children: [
+                            //publication
+                            Expanded(
+                              child: argument.get('publication') == ''
+                                  ? Text('')
+                                  : MaterialButton(
+                                onPressed: () async{
+                                  final url = argument.get('publication');
+                                  //
+                                  if (argument.get('publication') != '') {
+                                    if (await canLaunch(url)) {
+                                      await launch(url);
+                                    }
+                                  } else {
+                                    print('no publication found');
+                                  }
+                                },
+                                color: Colors.black,
+                                padding: EdgeInsets.symmetric(vertical: 13),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                child: Text(
+                                  "Publication",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
+                            ),
 
-                              SizedBox(width: 10),
+                            SizedBox(width: 10),
 
-                              // mail
-                              CustomButton(
-                                type: 'mailto:',
-                                link: argument.get('email'),
-                                icon: Icons.mail,
-                                color: Colors.red,
-                                borderRadius: 8,
-                              ),
+                            // mail
+                            CustomButton(
+                              type: 'mailto:',
+                              link: argument.get('email'),
+                              icon: Icons.mail,
+                              color: Colors.red,
+                              borderRadius: 8,
+                            ),
 
-                              SizedBox(width: 8),
+                            SizedBox(width: 8),
 
-                              //call
-                              CustomButton(
-                                type: 'tel:',
-                                link: argument.get('mobile'),
-                                icon: Icons.call,
-                                color: Colors.green,
-                                borderRadius: 8,
-                              ),
-                            ],
-                          ),
+                            //call
+                            CustomButton(
+                              type: 'tel:',
+                              link: argument.get('mobile'),
+                              icon: Icons.call,
+                              color: Colors.green,
+                              borderRadius: 8,
+                            ),
+                          ],
+                        ),
 
-                          //
-                          // Container(
-                          //   alignment: Alignment.bottomCenter,
-                          //   child: InkWell(
-                          //     onTap: () async {
-                          //       final url = argument.get('publication');
-                          //
-                          //       if (argument.get('publication') == '') {
-                          //         if (await canLaunch(url)) {
-                          //           await launch(url);
-                          //         }
-                          //       } else {
-                          //         print('no publication found');
-                          //       }
-                          //     },
-                          //     child: Row(
-                          //       children: [
-                          //         Expanded(
-                          //           child: Container(
-                          //             alignment: Alignment.center,
-                          //             height: 48,
-                          //             decoration: BoxDecoration(
-                          //               borderRadius: BorderRadius.circular(12),
-                          //               color: Colors.black,
-                          //             ),
-                          //             child: Text(
-                          //               "Publication",
-                          //               style: TextStyle(
-                          //                   fontSize: 18, color: Colors.white),
-                          //             ),
-                          //           ),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
               ),
+
             ],
           ),
+
         ),
       ),
     );

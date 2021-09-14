@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:psychology_cu/screen/office/stuff_list.dart';
 import 'cr_list.dart';
 
@@ -21,14 +19,13 @@ class OfficeScreen extends StatelessWidget {
               Tab(text: 'Office Stuff'),
             ],
             labelPadding: EdgeInsets.all(4),
+            labelColor: Colors.green,
             unselectedLabelColor: Colors.grey,
           ),
         ),
 
-        //
         body: TabBarView(
           children: [
-
             //cr list
             SingleChildScrollView(
               child: Padding(
@@ -53,22 +50,5 @@ class OfficeScreen extends StatelessWidget {
         ),
       ),
     );
-
-    //
-
-    uploadStuffData(){
-      FirebaseFirestore.instance.collection('Stuff').doc().set({
-        'name': '',
-        'post': '',
-        'mobile': '',
-        'imageUrl': '',
-        'serial': '',
-      }).whenComplete(() {
-        Fluttertoast.cancel();
-        Fluttertoast.showToast(msg: 'Upload successful');
-      });
-    }
   }
-
 }
-

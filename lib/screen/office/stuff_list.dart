@@ -1,12 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/constants.dart';
 import 'package:psychology_cu/widget/custom_button.dart';
 
-
 class StuffList extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,17 +39,24 @@ class StuffList extends StatelessWidget {
                     leading: CachedNetworkImage(
                       imageUrl: document.get('imageUrl'),
                       fadeInDuration: Duration(milliseconds: 500),
-                      imageBuilder: (context, imageProvider) => CircleAvatar(backgroundImage: imageProvider, radius: 32,),
-                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                          CircleAvatar(radius: 32,backgroundImage: AssetImage('assets/images/pp_placeholder.png')),
-                      errorWidget: (context, url, error) => CircleAvatar(radius: 32,backgroundImage: AssetImage('assets/images/pp_placeholder.png')),
-                    ),
-                    title: Expanded(
-                      child: new Text(
-                        '${document.get('name')}',
+                      imageBuilder: (context, imageProvider) => CircleAvatar(
+                        backgroundImage: imageProvider,
+                        radius: 32,
                       ),
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => CircleAvatar(
+                              radius: 32,
+                              backgroundImage: AssetImage(
+                                  'assets/images/pp_placeholder.png')),
+                      errorWidget: (context, url, error) => CircleAvatar(
+                          radius: 32,
+                          backgroundImage:
+                              AssetImage('assets/images/pp_placeholder.png')),
                     ),
-                    subtitle: new Text(
+                    title: Text(
+                      '${document.get('name')}',
+                    ),
+                    subtitle: Text(
                       document.get('post'),
                       style: TextStyle(color: Colors.teal),
                     ),

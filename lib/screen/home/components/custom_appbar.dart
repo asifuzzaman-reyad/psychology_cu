@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:psychology_cu/screen/notice/notice_screen.dart';
 
 AppBar customAppbar(context) {
   return AppBar(
@@ -11,13 +12,14 @@ AppBar customAppbar(context) {
       children: [
         Builder(
           builder: (context) => IconButton(
-              icon: SvgPicture.asset('assets/icons/menu.svg'),
+              icon: SvgPicture.asset('assets/icons/menu.svg',
+                  color: Theme.of(context).colorScheme.primary),
               onPressed: () => Scaffold.of(context).openDrawer()),
         ),
         Text.rich(
           TextSpan(
             text: 'PSYCHO',
-            style: TextStyle(color: Colors.black),
+            // style: TextStyle(color: Colors.black),
             children: [
               TextSpan(
                 text: 'LOGY',
@@ -34,11 +36,15 @@ AppBar customAppbar(context) {
           maxLines: 1,
         ),
         IconButton(
-            icon: SvgPicture.asset('assets/icons/bell.svg'),
+            icon: SvgPicture.asset(
+              'assets/icons/bell.svg',
+              color: Theme.of(context).colorScheme.primary,
+            ),
             onPressed: () {
               print("notification");
 
-              // Navigator.push(context,MaterialPageRoute(builder: (context) => AddStudent()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NoticeScreen()));
             }),
       ],
     ),

@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:psychology_cu/screen/study/study_category_screen_notes.dart';
-import 'package:psychology_cu/screen/study/upload/screen/upload_chapter_screen.dart';
 
 class NotesScreen extends StatelessWidget {
   const NotesScreen({
@@ -28,22 +27,6 @@ class NotesScreen extends StatelessWidget {
         .collection('Lessons');
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-
-          //
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => UploadChapterScreen(
-                  year: year,
-                  courseType: courseType,
-                  courseCode : courseCode,
-                  courseCategory : courseCategory
-              )));
-        },
-        child: Icon(Icons.add),
-      ),
-
-      //
       body: StreamBuilder<QuerySnapshot>(
           stream: reference.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

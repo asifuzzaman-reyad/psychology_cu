@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/screen/study/upload/screen/upload_pdf_screen.dart';
 import 'course_category_card.dart';
 
 class StudyCategoryScreenNotes extends StatefulWidget {
@@ -47,25 +46,8 @@ class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
         titleSpacing: 0,
         elevation: 0,
       ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => UploadPdfScreen(
-                  year: widget.year,
-                  courseType: widget.courseType,
-                  courseCode : widget.courseCode,
-                  courseCategory : widget.courseCategory,
-                  chapterNo: widget.chapterNo,
-
-              )));
-        },
-        child: Icon(Icons.add),
-      ),
-
-
       body: StreamBuilder<QuerySnapshot>(
-        stream: reference.snapshots(),
+        stream: reference.orderBy('title').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Something went wrong'));
@@ -78,10 +60,10 @@ class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
           // Course Category Card
           return snapshot.data!.size > 0
               ? CourseCategoryCard(
-            subtitle: widget.subtitle,
-            snapshot: snapshot,
-            ref: reference,
-          )
+                  subtitle: widget.subtitle,
+                  snapshot: snapshot,
+                  ref: reference,
+                )
               : Center(child: Text('No Data found'));
         },
       ),

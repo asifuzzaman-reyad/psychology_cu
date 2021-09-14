@@ -11,6 +11,12 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
   int _currentIndex = 0;
   List _pages = [HomeScreen(), StudyScreen(), ProfileScreen()];
 
