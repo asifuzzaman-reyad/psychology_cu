@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text('Don\'t have an account?'),
                       TextButton(onPressed: (){
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterInfoScreen()));
-                      }, child: Text('Sign Up')),
+                      }, child: Text('Sign Up', style: TextStyle(color: Colors.blue))),
                     ],
                   )
 

@@ -13,7 +13,7 @@ ThemeData lightThemeData(BuildContext context) {
       primary: Colors.black,
     ),
     textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Lato'),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.amber.shade200)
+    floatingActionButtonTheme: FloatingActionButtonThemeData(backgroundColor: Colors.amber.shade200),
   );
 }
 

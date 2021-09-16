@@ -25,8 +25,8 @@ class CommunityScreen extends StatelessWidget {
             Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                Image.network(
-                  'https://www.psycu.net/uploads/2015/03/Dept.-of-Psy.jpg',
+                Image.asset(
+                  'assets/images/dept_1.jpg',
                   fit: BoxFit.cover,
                   width: mediaQuery.width,
                   height: mediaQuery.height / 2.8,
@@ -34,7 +34,7 @@ class CommunityScreen extends StatelessWidget {
                 Container(
                   width: mediaQuery.width,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  color: Colors.grey.shade400.withOpacity(.4),
+                  color: Colors.grey.shade300.withOpacity(.5),
                   child: Text(
                     'Welcome to\nDepartment of Psychology'.toUpperCase(),
                     style: TextStyle(
@@ -69,8 +69,8 @@ class CommunityScreen extends StatelessWidget {
                             children: [
                               CircleAvatar(
                                 radius: 32,
-                                backgroundImage: NetworkImage(
-                                  'http://www.psycu.net/uploads/2017/02/Biplob-Kumar-Dey.jpg',
+                                backgroundImage: AssetImage(
+                                  'assets/images/bd_sir.jpg',
                                 ),
                               ),
                               SizedBox(width: 16),
@@ -119,8 +119,8 @@ class CommunityScreen extends StatelessWidget {
                         'The Department has a total strength of 17 teaching faculties. The teaching and research program is supported by the technical staff at different levels. Apart from the student laboratory, meant for the practicum work for the students at the Honours and Master’s level, we have a research lab, equipped with necessary amenities. Moreover, the Seminar room is equipped with the State-of-the-Art facilities. Presently, the best and latest technology gadgets have been procured and set up to enhance the teaching and research activities. The M.S. Psychology Courses include the latest trends in Psychology, with emphasis on practical training and field work.  The courses lay special emphasis on the acquisition of knowledge and skills through theoretical understanding and its practical implications. The Department has already initiated the process of revising all the courses at the undergraduate and postgraduate level. In addition, to lecturing as the primary mode of instruction, teaching is also interactive with the emphasis on the seminar, presentations, and discussions and also experiential exercises and peer mentoring.',
                         style: Theme.of(context).textTheme.bodyText2),
                     SizedBox(height: 16),
-                    Image.network(
-                      'https://www.psycu.net/uploads/2017/02/Library-768x591.jpg',
+                    Image.asset(
+                      'assets/images/dept_2.jpg',
                       fit: BoxFit.fill,
                       width: mediaQuery.width,
                       height: mediaQuery.height / 4,

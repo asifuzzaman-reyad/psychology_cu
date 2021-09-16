@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:psychology_cu/screen/auth/login_screen.dart';
 import 'package:psychology_cu/screen/auth/register_screen.dart';
+import 'package:psychology_cu/widget/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
@@ -24,21 +25,101 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
 
   bool _isLoading = false;
 
-
   @override
   Widget build(BuildContext context) {
-  final bool showFab = MediaQuery.of(context).viewInsets.bottom==0.0;
+    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
 
     return Scaffold(
-      floatingActionButton: showFab ? FloatingActionButton.extended(
-        onPressed: () async {
-          await canLaunch(kFbGroup)
-              ? await launch(kFbGroup)
-              : throw 'Could not launch $kFbGroup';
-        },
-        label: Text('Need verify code'),
-        icon: Icon(Icons.help),
-      ) : null,
+      floatingActionButton: showFab
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Help center'),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(Icons.clear),
+                              )
+                            ],
+                          ),
+                          titlePadding: EdgeInsets.only(left: 16),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                  'Like our page and send a message with your Name, Batch and Student id. We will send code as soon as possible.'),
+                              SizedBox(height: 8),
+                              OutlinedButton.icon(
+                                  onPressed: () async {
+                                    await canLaunch(kFbGroup)
+                                        ? await launch(kFbGroup)
+                                        : throw 'Could not launch $kFbGroup';
+                                  },
+                                  icon: Icon(Icons.facebook, color: Colors.blue),
+                                  label: Text('Get Code with Facebook')),
+
+                              Row(
+                                children: [
+                                  Expanded(child: Container(height: 1, color: Colors.grey)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('OR'),
+                                  ),
+                                  Expanded(child: Container(height: 1, color: Colors.grey)),
+                                ],
+                              ),
+                              Text('Contact with Developer'),
+                              SizedBox(height: 16),
+                              Container(
+                                color: Colors.transparent,
+                                // width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    //call
+                                    CustomButton(
+                                        type: 'tel:',
+                                        link: kDeveloperMobile,
+                                        icon: Icons.call,
+                                        color: Colors.green),
+
+                                    SizedBox(width: 8),
+
+                                    //mail
+                                    CustomButton(
+                                        type: 'mailto:',
+                                        link: kDeveloperEmail,
+                                        icon: Icons.mail,
+                                        color: Colors.red),
+
+                                    SizedBox(width: 8),
+
+                                    //facebook
+                                    CustomButton(
+                                        type: '',
+                                        link: kDeveloperFb,
+                                        icon: Icons.facebook,
+                                        color: Colors.blue),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 16),
+
+                            ],
+                          ),
+                        ));
+              },
+              label: Text('Need verify code'),
+              icon: Icon(Icons.help),
+            )
+          : null,
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.all(16),
@@ -283,12 +364,11 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => LoginScreen()));
                           },
-                          child: Text('Login Now')),
+                          child: Text('Login Now', style: TextStyle(color: Colors.blue))),
                     ],
                   ),
 
                   SizedBox(height: 8),
-
                 ],
               ),
             ),

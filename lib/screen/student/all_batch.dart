@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../constants.dart';
 
 class AllBatch extends StatefulWidget {
-
   @override
   _AllBatchState createState() => _AllBatchState();
 }
@@ -27,19 +26,27 @@ class _AllBatchState extends State<AllBatch> {
               Tab(text: kBatchList[2]),
               Tab(text: kBatchList[3]),
               Tab(text: kBatchList[4]),
+              Tab(text: kBatchList[5]),
+              Tab(text: kBatchList[6]),
+              Tab(text: kBatchList[7]),
             ],
             isScrollable: true,
             labelColor: Colors.green,
             unselectedLabelColor: Colors.grey,
           ),
         ),
-        body: TabBarView(children: [
-          BatchInformation(batch: kBatchList[0]),
-          BatchInformation(batch: kBatchList[1]),
-          BatchInformation(batch: kBatchList[2]),
-          BatchInformation(batch: kBatchList[3]),
-          BatchInformation(batch: kBatchList[4]),
-        ]),
+        body: TabBarView(
+          children: [
+            BatchInformation(batch: kBatchList[0]),
+            BatchInformation(batch: kBatchList[1]),
+            BatchInformation(batch: kBatchList[2]),
+            BatchInformation(batch: kBatchList[3]),
+            BatchInformation(batch: kBatchList[4]),
+            BatchInformation(batch: kBatchList[5]),
+            BatchInformation(batch: kBatchList[6]),
+            BatchInformation(batch: kBatchList[7]),
+          ],
+        ),
       ),
     );
   }
@@ -55,7 +62,6 @@ class BatchInformation extends StatefulWidget {
 }
 
 class _BatchInformationState extends State<BatchInformation> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,8 +126,7 @@ class _BatchInformationState extends State<BatchInformation> {
                                     'assets/images/pp_placeholder.png')),
                           ),
                         ),
-                        title:
-                            Text(data[index].get('name')),
+                        title: Text(data[index].get('name')),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -133,14 +138,16 @@ class _BatchInformationState extends State<BatchInformation> {
                                   TextSpan(
                                     text: data[index].get('id'),
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        // color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      // color: Colors.black,
                                     ),
                                   )
                                 ],
                               ),
                             ),
-                            data[index].get('hall') == '' || data[index].get('hall') == 'Info not available'
+                            data[index].get('hall') == '' ||
+                                    data[index].get('hall') ==
+                                        'Info not available'
                                 ? Text('')
                                 : Text.rich(
                                     TextSpan(
@@ -151,8 +158,8 @@ class _BatchInformationState extends State<BatchInformation> {
                                         TextSpan(
                                           text: data[index].get('hall'),
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              // color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            // color: Colors.black,
                                           ),
                                         )
                                       ],
@@ -171,5 +178,4 @@ class _BatchInformationState extends State<BatchInformation> {
           }),
     );
   }
-
 }
