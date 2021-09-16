@@ -1,13 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../constants.dart';
 
 class AllBatch extends StatefulWidget {
-  const AllBatch({Key? key}) : super(key: key);
-
   @override
   _AllBatchState createState() => _AllBatchState();
 }
@@ -16,7 +13,7 @@ class _AllBatchState extends State<AllBatch> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: batchList.length,
+      length: kBatchList.length,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -24,22 +21,32 @@ class _AllBatchState extends State<AllBatch> {
           title: Text('All Student List'),
           bottom: TabBar(
             tabs: [
-              Tab(text: batchList[0]),
-              Tab(text: batchList[1]),
-              Tab(text: batchList[2]),
-              Tab(text: batchList[3]),
-              Tab(text: batchList[4]),
+              Tab(text: kBatchList[0]),
+              Tab(text: kBatchList[1]),
+              Tab(text: kBatchList[2]),
+              Tab(text: kBatchList[3]),
+              Tab(text: kBatchList[4]),
+              Tab(text: kBatchList[5]),
+              Tab(text: kBatchList[6]),
+              Tab(text: kBatchList[7]),
             ],
             isScrollable: true,
+            labelColor: Colors.green,
+            unselectedLabelColor: Colors.grey,
           ),
         ),
-        body: TabBarView(children: [
-          BatchInformation(batch: batchList[0]),
-          BatchInformation(batch: batchList[1]),
-          BatchInformation(batch: batchList[2]),
-          BatchInformation(batch: batchList[3]),
-          BatchInformation(batch: batchList[4]),
-        ]),
+        body: TabBarView(
+          children: [
+            BatchInformation(batch: kBatchList[0]),
+            BatchInformation(batch: kBatchList[1]),
+            BatchInformation(batch: kBatchList[2]),
+            BatchInformation(batch: kBatchList[3]),
+            BatchInformation(batch: kBatchList[4]),
+            BatchInformation(batch: kBatchList[5]),
+            BatchInformation(batch: kBatchList[6]),
+            BatchInformation(batch: kBatchList[7]),
+          ],
+        ),
       ),
     );
   }
@@ -55,70 +62,15 @@ class BatchInformation extends StatefulWidget {
 }
 
 class _BatchInformationState extends State<BatchInformation> {
-  GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  TextEditingController _idController = TextEditingController();
-  TextEditingController _sessionController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print(widget.batch);
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                title: Text('Add Student Info'),
-                content: Form(
-                    key: _globalKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          controller: _sessionController,
-                          maxLength: 2,
-                          decoration: InputDecoration(hintText: 'session'),
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'Enter session';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.number,
-                        ),
-                        SizedBox(height: 16),
-                        TextFormField(
-                          controller: _idController,
-                          maxLength: 2,
-                          decoration: InputDecoration(hintText: 'Id'),
-                          validator: (val) {
-                            if (val!.isEmpty) {
-                              return 'Enter id';
-                            }
-                            return null;
-                          },
-                          keyboardType: TextInputType.number,
-                        ),
-                        SizedBox(height: 24),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                addStudentInformation(widget.batch);
-                              },
-                              child: Text('Add Info')),
-                        ),
-                      ],
-                    ))),
-          );
-        },
-        child: Icon(Icons.add),
-      ),
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('Psychology')
               .doc('Students')
               .collection(widget.batch)
+              .orderBy('status')
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -158,6 +110,9 @@ class _BatchInformationState extends State<BatchInformation> {
                         leading: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: CachedNetworkImage(
+                            width: 56,
+                            height: 56,
+                            fit: BoxFit.cover,
                             imageUrl: data[index].get('imageUrl'),
                             fadeInDuration: Duration(milliseconds: 500),
                             progressIndicatorBuilder:
@@ -171,13 +126,10 @@ class _BatchInformationState extends State<BatchInformation> {
                                     'assets/images/pp_placeholder.png')),
                           ),
                         ),
-                        title:
-                            // data[index].get('name') == '' ? Text('Name') :
-                            Text(data[index].get('name')),
+                        title: Text(data[index].get('name')),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Text( 'ID :  '+ data[index].get('id')),
                             Text.rich(
                               TextSpan(
                                 text: 'ID :  ',
@@ -186,13 +138,16 @@ class _BatchInformationState extends State<BatchInformation> {
                                   TextSpan(
                                     text: data[index].get('id'),
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
+                                      fontWeight: FontWeight.bold,
+                                      // color: Colors.black,
+                                    ),
                                   )
                                 ],
                               ),
                             ),
-                            data[index].get('hall') == ''
+                            data[index].get('hall') == '' ||
+                                    data[index].get('hall') ==
+                                        'Info not available'
                                 ? Text('')
                                 : Text.rich(
                                     TextSpan(
@@ -203,8 +158,9 @@ class _BatchInformationState extends State<BatchInformation> {
                                         TextSpan(
                                           text: data[index].get('hall'),
                                           style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
+                                            fontWeight: FontWeight.bold,
+                                            // color: Colors.black,
+                                          ),
                                         )
                                       ],
                                     ),
@@ -221,31 +177,5 @@ class _BatchInformationState extends State<BatchInformation> {
             );
           }),
     );
-  }
-
-  //
-  addStudentInformation(String batch) {
-    if (_globalKey.currentState!.validate()) {
-      String id = '${_sessionController.text}6080${_idController.text}';
-      FirebaseFirestore.instance
-          .collection('Psychology')
-          .doc('Students')
-          .collection(batch)
-          .doc(id)
-          .set(
-        {
-          'batch': batch,
-          'name': '',
-          'id': id,
-          'hall': '',
-          'mobile': '',
-          'imageUrl': '',
-        },
-      ).whenComplete(() {
-        Fluttertoast.cancel();
-        Fluttertoast.showToast(msg: 'Upload Complete');
-        _idController.clear();
-      });
-    }
   }
 }

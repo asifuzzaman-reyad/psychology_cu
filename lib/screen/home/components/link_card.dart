@@ -8,11 +8,13 @@ class LinkCard extends StatelessWidget {
     this.color,
     required this.link,
     required this.imageUrl,
+    this.enableBorder,
   });
   final String title;
   final Color? color;
   final String link;
   final String imageUrl;
+  final bool? enableBorder;
 
   void _launchURL() async => await canLaunch(link)
       ? await launch(link)
@@ -35,6 +37,7 @@ class LinkCard extends StatelessWidget {
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
+          border: enableBorder == true ? Border.all(color: Colors.grey, width: .5) : null
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +53,7 @@ class LinkCard extends StatelessWidget {
               child: Image.asset(imageUrl),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              padding: EdgeInsets.symmetric(vertical: enableBorder == true ? 2 : 8),
               child: Text(
                 title,
                 style: TextStyle(fontSize: 12),

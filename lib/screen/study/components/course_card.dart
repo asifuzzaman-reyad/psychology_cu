@@ -6,10 +6,11 @@ import 'package:psychology_cu/screen/home/components/headline.dart';
 import '../../../constants.dart';
 import '../study_details_screen.dart';
 
-
-//
 class CourseCard extends StatelessWidget {
-  const CourseCard({ required this.year, required this.courseType,});
+  const CourseCard({
+    required this.year,
+    required this.courseType,
+  });
   final String year;
   final String courseType;
 
@@ -31,47 +32,47 @@ class CourseCard extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
 
-          return snapshot.data!.size > 0 ?
-          SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // title
-                SizedBox(height: 8),
-                Headline(title: courseType),
-                //
-                buildCourseList(snapshot, year, courseType),
-              ],
-            ),
-          ) :
-          Center(child: Text(''));
+          return snapshot.data!.size > 0
+              ? SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // title
+                      SizedBox(height: 8),
+                      Headline(title: courseType),
+                      //
+                      buildCourseList(snapshot, year, courseType),
+                    ],
+                  ),
+                )
+              : Center(child: Text(''));
         });
   }
 }
 
 //
-ListView buildCourseList(AsyncSnapshot<dynamic> snapshot, String year, String courseType) {
+ListView buildCourseList(
+    AsyncSnapshot<dynamic> snapshot, String year, String courseType) {
   return ListView.separated(
-        shrinkWrap: true,
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        physics: ClampingScrollPhysics(),
-        separatorBuilder: (context, index) => SizedBox(height: 16),
+      shrinkWrap: true,
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      physics: ClampingScrollPhysics(),
+      separatorBuilder: (context, index) => SizedBox(height: 16),
+      //
+      itemCount: snapshot.data!.size,
+      itemBuilder: (context, index) {
         //
-        itemCount: snapshot.data!.size,
-        itemBuilder: (context, index) {
-          //
-          var document = snapshot.data!.docs[index];
-          Course course = Course(
-              courseCode: document.get('code'),
-              courseTitle: document.get('title'),
-              marks: document.get('marks'),
-              credits: document.get('credits'),
-              imageUrl: document.get('imageUrl'),
-              category: document.get('code'),
-          );
+        var document = snapshot.data!.docs[index];
+        Course course = Course(
+          courseCode: document.get('code'),
+          courseTitle: document.get('title'),
+          marks: document.get('marks'),
+          credits: document.get('credits'),
+          imageUrl: document.get('imageUrl'),
+          category: document.get('code'),
+        );
 
-
-          return Card(
+        return Card(
           elevation: 6,
           margin: EdgeInsets.all(0),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -92,21 +93,24 @@ ListView buildCourseList(AsyncSnapshot<dynamic> snapshot, String year, String co
               child: Row(
                 children: [
                   Expanded(
-                      flex: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.pink[50],
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(8),
-                              bottomLeft: Radius.circular(8),
-                            ),
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider('${course.imageUrl}' != ''
+                    flex: 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.pink[50],
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
+                        image: DecorationImage(
+                          image: CachedNetworkImageProvider(
+                              '${course.imageUrl}' != ''
                                   ? '${course.imageUrl}'
                                   : kNoImage),
-                              fit: BoxFit.cover,
-                            ),),
-                      ),),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
                   Expanded(
                     flex: 2,
                     child: Padding(
@@ -120,16 +124,19 @@ ListView buildCourseList(AsyncSnapshot<dynamic> snapshot, String year, String co
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Course Title',
-                                  style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey)),
                               Padding(
                                 padding: const EdgeInsets.only(right: 72),
-                                child: Text('${course.courseTitle}',
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      // letterSpacing: 0,
-                                    )),
+                                child: Text(
+                                  '${course.courseTitle}',
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    // letterSpacing: 0,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -156,7 +163,7 @@ ListView buildCourseList(AsyncSnapshot<dynamic> snapshot, String year, String co
             ),
           ),
         );
-    });
+      });
 }
 
 //
@@ -164,12 +171,18 @@ Column buildInfo(String title, value) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.end,
     children: [
-      Text(title, style: TextStyle(fontSize: 13, color: Colors.grey)),
+      Text(
+        title,
+        style: TextStyle(fontSize: 13, color: Colors.grey),
+      ),
       // SizedBox(width: 8),
       Text(
         value,
         style: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          // color: Colors.black87,
+        ),
       ),
     ],
   );

@@ -3,9 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:psychology_cu/constants.dart';
 import 'package:psychology_cu/screen/auth/login_screen.dart';
-import 'package:psychology_cu/screen/auth/register_info_screen.dart';
-import 'package:psychology_cu/screen/home/components/headline.dart';
 import 'package:psychology_cu/screen/profile/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -26,16 +25,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text(
+          'Profile',
+          style: TextStyle(
+            fontSize: 20,
+            fontFamily: 'Lato',
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1,
+          ),
+        ),
         elevation: 0,
         actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EditProfileScreen()));
-              },
-              icon: Icon(Icons.edit)),
-          SizedBox(width: 12)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 16, 8),
+            child: MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                color: Colors.pink[100],
+                padding: EdgeInsets.only(right: 6, left: 16),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: Text('sign out'.toUpperCase(),
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            content: Text('Are you sure to sign out?'),
+                            actions: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('No'.toUpperCase())),
+                                  TextButton(
+                                      onPressed: () async {
+                                        await FirebaseAuth.instance.signOut();
+                                        Fluttertoast.showToast(
+                                            msg: 'Signing Out...');
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            LoginScreen.routeName,
+                                            ((Route<dynamic> route) => false));
+                                      },
+                                      child: Text('Sign Out'.toUpperCase())),
+                                  SizedBox(width: 8),
+                                ],
+                              ),
+                            ],
+                          ));
+                },
+                child: Row(
+                  children: [
+                    Text('Sign Out'),
+                    SizedBox(width: 10),
+                    Icon(Icons.logout_outlined, size: 21,),
+                  ],
+                )),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -73,33 +121,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         return Container(
                           width: double.infinity,
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               // header
                               Container(
                                 padding: EdgeInsets.all(16),
-                                color: Colors.white,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-
                                     //image
                                     CachedNetworkImage(
                                       imageUrl: snapshot.data!.get('imageUrl'),
-                                      fadeInDuration: Duration(milliseconds: 500),
-                                      imageBuilder: (context, imageProvider) => CircleAvatar(backgroundImage: imageProvider, radius: 100,),
-                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                          CircleAvatar(radius: 100,backgroundImage: AssetImage('assets/images/pp_placeholder.png')),
-                                      errorWidget: (context, url, error) => Icon(Icons.error),
+                                      fadeInDuration:
+                                          Duration(milliseconds: 500),
+                                      imageBuilder: (context, imageProvider) =>
+                                          CircleAvatar(
+                                        backgroundImage: imageProvider,
+                                        radius: 100,
+                                      ),
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircleAvatar(
+                                              radius: 100,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/pp_placeholder.png')),
+                                      errorWidget: (context, url, error) =>
+                                          CircleAvatar(
+                                              radius: 100,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/pp_placeholder.png')),
                                     ),
 
-                                    //name
                                     SizedBox(height: 8),
+
+                                    //name
                                     Text(
                                       snapshot.data!.get('name'),
                                       style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold),
                                     ),
+
                                     SizedBox(height: 2),
 
                                     //id
@@ -117,27 +179,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 8, horizontal: 16),
-                                            decoration: BoxDecoration(
-                                              color: Colors.greenAccent,
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8, horizontal: 16),
+                                          decoration: BoxDecoration(
+                                            color: kCardColor2,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                          child: Text(
+                                            snapshot.data!.get('batch'),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
                                             ),
-                                            child: Text(
-                                                snapshot.data!.get('batch'))),
+                                          ),
+                                        ),
                                         SizedBox(width: 8),
                                         Container(
                                           padding: EdgeInsets.symmetric(
                                               vertical: 8, horizontal: 16),
                                           decoration: BoxDecoration(
-                                            color: Colors.amberAccent,
+                                            color: kCardColor1,
                                             borderRadius:
                                                 BorderRadius.circular(4),
                                           ),
                                           child: Text(
-                                              '${int.parse(snapshot.data!.get('id').toString().substring(0, 2)) - 1}'
-                                              ' - ${snapshot.data!.get('id').toString().substring(0, 2)}'),
+                                            '${int.parse(snapshot.data!.get('id').toString().substring(0, 2)) - 1}'
+                                            ' - ${snapshot.data!.get('id').toString().substring(0, 2)}',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -145,183 +218,151 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
 
-                              //information
-                              SizedBox(height: 8),
-                              Headline(title: 'Information'),
-                              SizedBox(height: 8),
+                              SizedBox(height: 16),
 
-                              Container(
-                                width: double.infinity,
-                                color: Colors.white,
-                                padding: EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Mobile',
-                                      style: TextStyle(
-                                        color: Colors.black45,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      snapshot.data!.get('mobile'),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      'Email',
-                                      style: TextStyle(
-                                        color: Colors.black45,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      FirebaseAuth.instance.currentUser!.email
-                                          .toString(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      'Hall',
-                                      style: TextStyle(
-                                        color: Colors.black45,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    Text(
-                                      snapshot.data!.get('hall'),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              //information
-                              SizedBox(height: 8),
-
-                              //
-                              Theme(
-                                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                                child: ExpansionTile(
-                                    leading: Icon(Icons.settings),
-                                    title: Headline(title: 'Settings'),
+                              //information section
+                              Row(
+                                children: [
+                                  Column(
                                     children: [
                                       Container(
-                                        // color: Colors.white,
-                                        padding: EdgeInsets.symmetric(vertical: 8),
-                                        child: Column(
+                                        height: 8,
+                                        width: 20,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(height: 56),
+                                      Container(
+                                        height: 8,
+                                        width: 20,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+
+                                  //
+                                  Expanded(
+                                    child: Card(
+                                      elevation: 4,
+                                      margin: EdgeInsets.only(right: 16),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      child: Container(
+
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 24, 16, 24),
+                                        child: Row(
                                           children: [
-                                            ListTile(
-                                              onTap: () async {
-                                                await FirebaseAuth.instance.signOut();
-                                                print('Sign Out');
-                                                Fluttertoast.showToast(msg: 'Sign out');
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            LoginScreen()));
-                                              },
-                                              tileColor: Colors.white,
-                                              leading: Icon(Icons.exit_to_app),
-                                              title: Text('Sign Out'),
+                                            // information
+                                            RotatedBox(
+                                              quarterTurns: -45,
+                                              child: Container(
+                                                color: Colors.grey.shade300,
+                                                padding: EdgeInsets.all(8),
+                                                child: Text(
+                                                  'Information'.toUpperCase(),
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.black),
+                                                ),
+                                              ),
                                             ),
-                                            SizedBox(height: 2),
-                                            ListTile(
-                                              onTap: () async {
-                                                showDialog(
-                                                    context: context,
-                                                    builder: (context) => AlertDialog(
-                                                      title: Text('Are you sure?'),
-                                                      content: Text(
-                                                          'Delete your account permanently'),
-                                                      actions: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                          children: [
-                                                            TextButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  var user =
-                                                                      FirebaseAuth
-                                                                          .instance
-                                                                          .currentUser;
-                                                                  //delete user
-                                                                  await user!
-                                                                      .delete();
-                                                                  print(
-                                                                      'Delete user from auth list');
 
-                                                                  // delete data
-                                                                  FirebaseFirestore
-                                                                      .instance
-                                                                      .collection(
-                                                                      'Users')
-                                                                      .doc(user.uid
-                                                                      .toString())
-                                                                      .delete();
-                                                                  print(
-                                                                      'Delete user info from database');
 
-                                                                  Navigator.pushReplacement(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder:
-                                                                              (context) =>
-                                                                              RegisterInfoScreen()));
-                                                                },
-                                                                child: Text('Yes')),
-                                                            // SizedBox(width: 8),
-                                                            TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                },
-                                                                child: Text('No')),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ));
-                                              },
-                                              tileColor: Colors.white,
-                                              leading: Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
-                                              ),
-                                              title: Text(
-                                                'Delete Account',
-                                                style: TextStyle(color: Colors.red),
-                                              ),
+                                            SizedBox(width: 16),
+
+                                            // mobile, email, hall
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+
+                                                Text(
+                                                  'Mobile No',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+
+                                                Text(
+                                                  snapshot.data!.get('mobile'),
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+
+                                                SizedBox(height: 16),
+
+                                                Text(
+                                                  'Email Address',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  FirebaseAuth.instance
+                                                      .currentUser!.email
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 16),
+                                                Text(
+                                                  'Hall Name',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  snapshot.data!.get('hall'),
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ],
-                                ),
+                                    ),
+                                  ),
+                                ],
                               ),
 
+                              SizedBox(height: 16),
+                              Container(
+                                alignment: Alignment.centerRight,
+                                padding: EdgeInsets.all(16),
+                                child: FloatingActionButton.extended(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditProfileScreen(batch: batch, id: id, snapshot: snapshot.data!)));
+                                  },
+                                  label: Text('Edit Profile'),
+                                  icon: Icon(Icons.edit),
+                                ),
+                              )
                             ],
                           ),
                         );
-                      });
-                }),
+                      },
+                  );
+                },),
           ],
         ),
       ),
+
+      // sign out
     );
   }
 }

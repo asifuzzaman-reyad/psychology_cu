@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:psychology_cu/screen/auth/login_screen.dart';
 import 'package:psychology_cu/screen/auth/register_screen.dart';
+import 'package:psychology_cu/widget/custom_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants.dart';
 
@@ -18,8 +20,6 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
   TextEditingController _verifyField = TextEditingController();
   TextEditingController _mobileField = TextEditingController();
 
-  List<String> batchList = ['Batch 12', 'Batch 13', 'Batch 14', 'Batch 15'];
-
   var _selectedBatch;
   var _selectedHall;
 
@@ -27,7 +27,99 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
+
     return Scaffold(
+      floatingActionButton: showFab
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Help center'),
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(Icons.clear),
+                              )
+                            ],
+                          ),
+                          titlePadding: EdgeInsets.only(left: 16),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                  'Like our page and send a message with your Name, Batch and Student id. We will send code as soon as possible.'),
+                              SizedBox(height: 8),
+                              OutlinedButton.icon(
+                                  onPressed: () async {
+                                    await canLaunch(kFbGroup)
+                                        ? await launch(kFbGroup)
+                                        : throw 'Could not launch $kFbGroup';
+                                  },
+                                  icon: Icon(Icons.facebook, color: Colors.blue),
+                                  label: Text('Get Code with Facebook')),
+
+                              Row(
+                                children: [
+                                  Expanded(child: Container(height: 1, color: Colors.grey)),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('OR'),
+                                  ),
+                                  Expanded(child: Container(height: 1, color: Colors.grey)),
+                                ],
+                              ),
+                              Text('Contact with Developer'),
+                              SizedBox(height: 16),
+                              Container(
+                                color: Colors.transparent,
+                                // width: double.infinity,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    //call
+                                    CustomButton(
+                                        type: 'tel:',
+                                        link: kDeveloperMobile,
+                                        icon: Icons.call,
+                                        color: Colors.green),
+
+                                    SizedBox(width: 8),
+
+                                    //mail
+                                    CustomButton(
+                                        type: 'mailto:',
+                                        link: kDeveloperEmail,
+                                        icon: Icons.mail,
+                                        color: Colors.red),
+
+                                    SizedBox(width: 8),
+
+                                    //facebook
+                                    CustomButton(
+                                        type: '',
+                                        link: kDeveloperFb,
+                                        icon: Icons.facebook,
+                                        color: Colors.blue),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 16),
+
+                            ],
+                          ),
+                        ));
+              },
+              label: Text('Need verify code'),
+              icon: Icon(Icons.help),
+            )
+          : null,
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.all(16),
@@ -35,12 +127,18 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
             key: _formKey,
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(height: 16),
 
                   Text(
                     'Register'.toUpperCase(),
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Verify your identity ',
+                    style: TextStyle(fontSize: 16),
                   ),
 
                   SizedBox(height: 32),
@@ -53,8 +151,11 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                           value: _selectedBatch,
                           hint: Text('Choose Batch'),
                           // isExpanded: true,
-                          decoration:
-                              InputDecoration(border: OutlineInputBorder()),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 18, horizontal: 8),
+                          ),
                           onChanged: (value) {
                             setState(() {
                               _selectedBatch = value;
@@ -62,7 +163,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                           },
                           validator: (value) =>
                               value == null ? "Choose your batch" : null,
-                          items: batchList.map((String val) {
+                          items: kBatchList.map((String val) {
                             return DropdownMenuItem(
                               value: val,
                               child: Text(
@@ -79,8 +180,8 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Enter student id';
-                            } else if (value.length < 8) {
-                              return 'Student id al least 8 digits';
+                            } else if (value.length < 8 || value.length > 8) {
+                              return 'Student id at least 8 digits';
                             }
                             return null;
                           },
@@ -101,12 +202,12 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                     controller: _verifyField,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Enter verify code';
+                        return 'Enter verification code';
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      hintText: 'Student Verify Code',
+                      hintText: 'Student Verification Code',
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -120,7 +221,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                     validator: (value) {
                       if (value == null) {
                         return 'Enter Mobile Number';
-                      } else if (value.length < 11) {
+                      } else if (value.length < 11 || value.length > 11) {
                         return 'Mobile Number at least 11 digits';
                       }
                       return null;
@@ -139,7 +240,11 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                     value: _selectedHall,
                     hint: Text('Choose Hall'),
                     // isExpanded: true,
-                    decoration: InputDecoration(border: OutlineInputBorder()),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+                    ),
                     onChanged: (value) {
                       setState(() {
                         _selectedHall = value;
@@ -163,7 +268,6 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                   Stack(
                     alignment: Alignment.centerLeft,
                     children: [
-
                       //button
                       Container(
                         width: double.infinity,
@@ -179,14 +283,15 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                                   .doc(_idField.text)
                                   .get()
                                   .then((DocumentSnapshot documentSnapshot) {
-                                 if (documentSnapshot.exists) {
-                                   print('id found: ' + documentSnapshot.id);
+                                if (documentSnapshot.exists) {
+                                  print('id found: ' + documentSnapshot.id);
 
-                                   //
+                                  //
                                   var getToken = documentSnapshot.get('token');
+
                                   if (getToken == _verifyField.text) {
                                     Fluttertoast.showToast(
-                                        msg: "Verify Code Match");
+                                        msg: "Verification Code Match");
 
                                     //
                                     setState(() => _isLoading = false);
@@ -194,28 +299,34 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => RegisterScreen(
+                                            builder: (context) =>
+                                                RegisterScreen(
                                                   batch: _selectedBatch,
                                                   id: _idField.text,
                                                   mobile: _mobileField.text,
                                                   hall: _selectedHall,
                                                 )));
+                                  } else if (getToken == 'used') {
+                                    Fluttertoast.showToast(
+                                        msg: "Verification code already used");
+                                    //
+                                    setState(() => _isLoading = false);
                                   } else {
                                     Fluttertoast.cancel();
                                     Fluttertoast.showToast(
-                                        msg: "Wrong verify code. Enter correct one");
+                                        msg:
+                                            "Wrong verify code. Enter correct one");
                                     setState(() => _isLoading = false);
                                   }
                                 } else {
-                                  print('Document does not exist on the database');
+                                  print(
+                                      'Document does not exist on the database');
                                   Fluttertoast.cancel();
-                                  Fluttertoast.showToast(msg: "Student Id not found in Database");
+                                  Fluttertoast.showToast(
+                                      msg: "Student Id not found in Database");
                                   setState(() => _isLoading = false);
-                                 }
+                                }
                               });
-                              //     .doc('Students').collection(_selectedBatch)
-                              //     .doc(_idField.text)
-                              //     .set(studentInfo);
                             }
                           },
                           child: Text('Next'),
@@ -233,7 +344,9 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                         padding: const EdgeInsets.only(left: 32),
                         child: Visibility(
                             visible: _isLoading,
-                            child: CircularProgressIndicator(color: Colors.red,)),
+                            child: CircularProgressIndicator(
+                              color: Colors.red,
+                            )),
                       ),
                     ],
                   ),
@@ -251,9 +364,11 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => LoginScreen()));
                           },
-                          child: Text('Login Now')),
+                          child: Text('Login Now', style: TextStyle(color: Colors.blue))),
                     ],
-                  )
+                  ),
+
+                  SizedBox(height: 8),
                 ],
               ),
             ),

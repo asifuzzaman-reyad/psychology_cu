@@ -7,7 +7,6 @@ import 'package:psychology_cu/screen/student/all_batch.dart';
 class StudentScreen extends StatelessWidget {
   static const routeName = 'student_screen';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,19 +18,23 @@ class StudentScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AllBatch()));
+            child: MaterialButton(
+              color: Colors.pink[100],
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AllBatch()));
                 },
-                child: Text('All Batch')),
+                child: Text('All Student')),
           )
         ],
       ),
-
-
       body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
-        builder: (context, snapshot){
+        stream: FirebaseFirestore.instance
+            .collection('Users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
+        builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Something wrong'));
           }
@@ -43,7 +46,9 @@ class StudentScreen extends StatelessWidget {
               stream: FirebaseFirestore.instance
                   .collection('Psychology')
                   .doc('Students')
-                  .collection(snapshot.data!.get('batch')).snapshots(),
+                  .collection(snapshot.data!.get('batch'))
+                  .orderBy('status')
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(child: Text('Something wrong'));
@@ -60,7 +65,6 @@ class StudentScreen extends StatelessWidget {
                   separatorBuilder: (BuildContext context, int index) =>
                       SizedBox(height: 16),
                   itemBuilder: (BuildContext context, int index) {
-                    // return Text(data[index].get('name'));
                     return StudentCard(student: data[index]);
                   },
                 );
@@ -78,20 +82,12 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey,
-                  blurRadius: 8,
-                  spreadRadius: .2,
-                  offset: Offset(2, 3))
-            ]),
+    return Card(
+      elevation: 4,
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -103,24 +99,30 @@ class StudentCard extends StatelessWidget {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   Text(
-                    // 'Azizul Hakim Sojol',
                     student.get('name'),
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4),
-                  Text('Student ID', style: TextStyle(fontSize: 12)),
-                  Text(
-                    student.get('id'),
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
-                  if(student.get('hall') != '' )
-                  Text('Hall', style: TextStyle(fontSize: 12)),
+                  Text('Student Id', style: TextStyle(fontSize: 12)),
                   Text(
-                    student.get('hall'),
-                    // 'Student All  name place holder holderholderholderholderholder',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    student.get('id'),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 4),
+                  student.get('hall') == '' || student.get('hall') == 'Info not available'
+                    ? Text('')
+                    : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Hall', style: TextStyle(fontSize: 12)),
+                        Text(
+                          student.get('hall'),
+                          maxLines: 2,
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -132,11 +134,18 @@ class StudentCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: CachedNetworkImage(
+                  height: 100,
+                  fit: BoxFit.cover,
                   imageUrl: student.get('imageUrl'),
                   fadeInDuration: Duration(milliseconds: 500),
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      ClipRRect(borderRadius:BorderRadius.circular(8) ,child: Image.asset('assets/images/pp_placeholder.png')),
-                  errorWidget: (context, url, error) => ClipRRect(borderRadius:BorderRadius.circular(8) ,child: Image.asset('assets/images/pp_placeholder.png')),
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child:
+                              Image.asset('assets/images/pp_placeholder.png')),
+                  errorWidget: (context, url, error) => ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset('assets/images/pp_placeholder.png')),
                 ),
               ),
             )

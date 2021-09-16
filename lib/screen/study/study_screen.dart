@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/screen/study/upload/screen/upload_course_screen.dart';
+import 'package:psychology_cu/constants.dart';
 import 'components/course_card.dart';
 
 class StudyScreen extends StatefulWidget {
@@ -15,15 +15,13 @@ class _StudyScreenState extends State<StudyScreen> {
   String batch = '';
   String year = '';
 
-  var yearList = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
   String? selectedYear;
   String yearHint = 'Year';
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
         // centerTitle: false,
         elevation: 0,
@@ -46,11 +44,11 @@ class _StudyScreenState extends State<StudyScreen> {
                 child: DropdownButton(
                   hint: Text(yearHint),
                   value: selectedYear,
-                  items: yearList
+                  items: kYearList
                       .map(
                         (String item) =>
-                        DropdownMenuItem(child: Text(item), value: item),
-                  )
+                            DropdownMenuItem(child: Text(item), value: item),
+                      )
                       .toList(),
                   onChanged: (String? value) {
                     setState(() {
@@ -66,48 +64,41 @@ class _StudyScreenState extends State<StudyScreen> {
       ),
 
       //
-      floatingActionButton: selectedYear != null ? FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => UploadCourseScreen(
-                year: selectedYear!,
-              )));
-        },
-        child: Icon(Icons.add),
-      ) : Text(''),
 
       body: StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('Users')
-              .doc(FirebaseAuth.instance.currentUser!.uid.toString())
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text('Something wrong'));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
+        stream: FirebaseFirestore.instance
+            .collection('Users')
+            .doc(FirebaseAuth.instance.currentUser!.uid.toString())
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Something wrong'));
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-            // get batch
-            var userBatch = snapshot.data!.get('batch');
-            return StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('Batch')
-                    .doc(userBatch)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Something wrong'));
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
+          // get batch
+          var userBatch = snapshot.data!.get('batch');
+          return StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('Batch')
+                .doc(userBatch)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text('Something wrong'));
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-                  var year = snapshot.data!.get('year');
-                  return buildCourseList(year);
-                });
-          }),
+              var year = snapshot.data!.get('year');
+              return buildCourseList(year);
+            },
+          );
+        },
+      ),
 
       // body: buildPadding(),
     );
@@ -116,16 +107,20 @@ class _StudyScreenState extends State<StudyScreen> {
   // CourseList
   Padding buildCourseList(year) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        child: SingleChildScrollView(
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            //major course
-            CourseCard(year: selectedYear == null ? year : selectedYear, courseType: 'Major Course'),
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      child: SingleChildScrollView(
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          //major course
+          CourseCard(
+              year: selectedYear == null ? year : selectedYear,
+              courseType: 'Major Course'),
 
-            // related course
-            CourseCard(year: selectedYear == null ? year : selectedYear, courseType: 'Related Course'),
-          ]),
-        ));
+          // related course
+          CourseCard(
+              year: selectedYear == null ? year : selectedYear,
+              courseType: 'Related Course'),
+        ]),
+      ),
+    );
   }
-
 }

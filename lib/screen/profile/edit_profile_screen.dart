@@ -9,9 +9,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:psychology_cu/constants.dart';
-import 'package:psychology_cu/screen/study/upload/api/firebase_api.dart';
+import 'package:psychology_cu/firebase/firebase_api.dart';
 
 class EditProfileScreen extends StatefulWidget {
+  EditProfileScreen(
+      {required this.batch, required this.id, required this.snapshot});
+  final String batch;
+  final String id;
+  final DocumentSnapshot snapshot;
+
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
 }
@@ -20,18 +26,213 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   File? _imageFile;
   UploadTask? task;
   bool isTaskActive = false;
+  bool _isLoading = false;
 
   GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
 
-  var _selectedHall;
+  var _selectedHall ;
 
-  var userRef = FirebaseFirestore.instance
-      .collection('Users')
-      .doc(FirebaseAuth.instance.currentUser!.uid.toString());
-  var studentRef =
-      FirebaseFirestore.instance.collection('Psychology').doc('Students');
+  @override
+  Widget build(BuildContext context) {
+    _nameController.text = widget.snapshot.get('name');
+    _mobileController.text = widget.snapshot.get('mobile');
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Profile'),
+        elevation: 0,
+      ),
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        width: double.infinity,
+        child: SingleChildScrollView(
+          child: Form(
+            key: _globalKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                //
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    GestureDetector(
+                      onTap: () => pickNewImage(),
+                      child: Container(
+                        height: 200,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.redAccent,
+                        ),
+                        child: _imageFile == null
+                            ? CachedNetworkImage(
+                                imageUrl: widget.snapshot.get('imageUrl'),
+                                fadeInDuration: Duration(milliseconds: 500),
+                                imageBuilder: (context, imageProvider) =>
+                                    CircleAvatar(
+                                  backgroundImage: imageProvider,
+                                  radius: 100,
+                                ),
+                                progressIndicatorBuilder: (context, url,
+                                        downloadProgress) =>
+                                    CircleAvatar(
+                                        radius: 100,
+                                        backgroundImage: AssetImage(
+                                            'assets/images/pp_placeholder.png')),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              )
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: Image.file(
+                                  _imageFile!,
+                                  fit: BoxFit.cover,
+                                )),
+                      ),
+                    ),
+
+                    //
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: MaterialButton(
+                        onPressed: () => pickNewImage(),
+                        child: Icon(Icons.camera, color: Colors.black),
+                        shape: CircleBorder(),
+                        color: Colors.grey.shade300,
+                        padding: EdgeInsets.all(12),
+                        minWidth: 24,
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 24),
+
+                //name
+                TextFormField(
+                  controller: _nameController,
+                  validator: (val) => val!.isEmpty ? 'Enter your Name' : null,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.text,
+                  textCapitalization: TextCapitalization.words,
+                ),
+
+                SizedBox(height: 16),
+
+                // mobile
+                TextFormField(
+                  controller: _mobileController,
+                  validator: (val) => val!.length < 11 || val.length > 11
+                      ? 'Mobile Number must be 11 digit'
+                      : null,
+                  decoration: InputDecoration(
+                    labelText: 'Mobile',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+
+                SizedBox(height: 16),
+
+                // hall
+                DropdownButtonFormField(
+                  value: _selectedHall,
+                  hint: Text('Change Hall Name'),
+                  // isExpanded: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 12)
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedHall = value;
+                    });
+                  },
+                  // validator: (value) =>
+                  // value == null ? "Choose your hall" : null,
+                  items: kHallList.map((String val) {
+                    return DropdownMenuItem(
+                      value: val,
+                      child: Text(
+                        val,
+                      ),
+                    );
+                  }).toList(),
+                ),
+
+                SizedBox(height: 24),
+
+                // button
+                Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    MaterialButton(
+                        onPressed: () {
+                          if (_globalKey.currentState!.validate()) {
+                            if (_imageFile != null) {
+                              setState(() {
+                                _isLoading = true;
+                              });
+                              uploadFile(batch: widget.batch, id: widget.id);
+                            } else {
+                              setState(() {
+                                _isLoading = true;
+                              });
+
+                              print(_selectedHall);
+                              //
+                              FirebaseFirestore.instance
+                                  .collection('Psychology')
+                                  .doc('Students')
+                                  .collection(widget.batch)
+                                  .doc(widget.id)
+                                  .update({
+                                'name': _nameController.text,
+                                'mobile': _mobileController.text,
+                                'hall': _selectedHall == null ? widget.snapshot.get('hall') : _selectedHall,
+                              }).whenComplete(() {
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                Fluttertoast.cancel();
+                                Fluttertoast.showToast(
+                                    msg: 'Update successful');
+                                Navigator.pop(this.context);
+                              });
+                            }
+                          }
+                        },
+                        color: Colors.black,
+                        height: 48,
+                        minWidth: double.infinity,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Text("Update Profile",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16))),
+                    Visibility(
+                      visible: _isLoading,
+                      child: Positioned(
+                        left: 32,
+                        child: CircularProgressIndicator(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   // select image
   Future pickImage() async {
@@ -65,7 +266,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
-  //
+  // pick cropped file
   pickNewImage() async {
     final _picker = ImagePicker();
     var pickedFile = await _picker.pickImage(
@@ -100,211 +301,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Profile'),
-        elevation: 0,
-      ),
-      body: StreamBuilder<DocumentSnapshot>(
-          stream: userRef.snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text('Something went wrong'));
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            var batch = snapshot.data!.get('batch').toString();
-            var id = snapshot.data!.get('id').toString();
-
-            return StreamBuilder<DocumentSnapshot>(
-                stream: studentRef.collection(batch).doc(id).snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Something went wrong'));
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-
-                  //
-                  _nameController.text = snapshot.data!.get('name');
-                  _mobileController.text = snapshot.data!.get('mobile');
-                  // _selectedHall = snapshot.data!.get('hall');
-
-                  return Container(
-                    padding: const EdgeInsets.all(16),
-                    width: double.infinity,
-                    child: SingleChildScrollView(
-                      child: Form(
-                        key: _globalKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            //
-                            Stack(
-                              alignment: Alignment.bottomRight,
-                              children: [
-                                Container(
-                                  height: 200,
-                                  width: 200,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.redAccent,
-                                  ),
-                                  child: _imageFile == null
-                                      ? CachedNetworkImage(
-                                          imageUrl:
-                                              snapshot.data!.get('imageUrl'),
-                                          fadeInDuration:
-                                              Duration(milliseconds: 500),
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  CircleAvatar(
-                                            backgroundImage: imageProvider,
-                                            radius: 100,
-                                          ),
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              CircleAvatar(
-                                                  radius: 100,
-                                                  backgroundImage: AssetImage(
-                                                      'assets/images/pp_placeholder.png')),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                        )
-                                      : ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          child: Image.file(
-                                            _imageFile!,
-                                            fit: BoxFit.cover,
-                                          )),
-                                ),
-
-                                //
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 16),
-                                  child: MaterialButton(
-                                    onPressed: () => pickNewImage(),
-                                    child: Icon(Icons.camera),
-                                    shape: CircleBorder(),
-                                    color: Colors.grey.shade300,
-                                    padding: EdgeInsets.all(10),
-                                    minWidth: 24,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 16),
-
-                            //name
-                            TextFormField(
-                              controller: _nameController,
-                              validator: (val) =>
-                                  val!.isEmpty ? 'Enter your Name' : null,
-                              decoration: InputDecoration(
-                                labelText: 'Name',
-                                border: OutlineInputBorder(),
-                              ),
-                              keyboardType: TextInputType.text,
-                              textCapitalization: TextCapitalization.words,
-                            ),
-
-                            SizedBox(height: 16),
-
-                            //
-                            TextFormField(
-                              controller: _mobileController,
-                              validator: (val) =>
-                                  val!.length < 11 || val.length > 11
-                                      ? 'Mobile Number must be 11 digit'
-                                      : null,
-                              decoration: InputDecoration(
-                                labelText: 'Mobile',
-                                border: OutlineInputBorder(),
-                              ),
-                              keyboardType: TextInputType.number,
-                            ),
-
-                            SizedBox(height: 16),
-
-                            // hall
-                            DropdownButtonFormField(
-                              value: _selectedHall,
-                              hint: Text('Choose Hall if want to change'),
-                              // isExpanded: true,
-                              decoration:
-                                  InputDecoration(border: OutlineInputBorder()),
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedHall = value;
-                                });
-                              },
-                              // validator: (value) =>
-                              // value == null ? "Choose your hall" : null,
-                              items: kHallList.map((String val) {
-                                return DropdownMenuItem(
-                                  value: val,
-                                  child: Text(
-                                    val,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-
-                            SizedBox(height: 16),
-
-                            // button
-                            MaterialButton(
-                                onPressed: () {
-                                  if (_globalKey.currentState!.validate()) {
-                                    if (_imageFile != null) {
-                                      uploadFile(snapshot.data!);
-                                    } else {
-                                      studentRef
-                                          .collection(batch)
-                                          .doc(id)
-                                          .update({
-                                        'name': _nameController.text,
-                                        'mobile': _mobileController.text,
-                                        'hall': _selectedHall == null
-                                            ? snapshot.data!.get('hall')
-                                            : _selectedHall,
-                                      }).whenComplete(() {
-                                        Fluttertoast.cancel();
-                                        Fluttertoast.showToast(
-                                            msg: 'Update successful');
-                                        Navigator.pop(this.context);
-                                      });
-                                    }
-                                  }
-                                },
-                                color: Colors.blue,
-                                height: 48,
-                                minWidth: double.infinity,
-                                child: Text("Update Profile"))
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                });
-          }),
-    );
-  }
-
-  //
   // upload and download url
-  Future uploadFile(DocumentSnapshot data) async {
-    String batch = data.get('batch');
-    String id = data.get('id');
-
+  Future uploadFile({required String batch, required String id}) async {
     final destination = 'Users/$batch/$id.jpg';
     task = FirebaseApi.uploadFile(destination, _imageFile!);
     setState(() {});
@@ -316,11 +314,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     print('Download-Link: $downloadedUrl');
 
     // cloud fire store
-
-    studentRef
+    FirebaseFirestore.instance.collection('Psychology')
+        .doc('Students')
         .collection(batch)
         .doc(id)
         .update({'imageUrl': downloadedUrl}).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
       Fluttertoast.cancel();
       Fluttertoast.showToast(msg: 'Update successful');
       Navigator.pop(this.context);

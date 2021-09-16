@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:psychology_cu/screen/study/study_category_screen.dart';
-import 'package:psychology_cu/screen/study/upload/upload_file_screen.dart';
 
 import 'notes_screen.dart';
 
@@ -40,6 +39,8 @@ class _StudyDetailsScreenState extends State<StudyDetailsScreen> {
               Tab(text: 'Questions'),
               Tab(text: 'Syllabus'),
             ],
+            labelColor: Colors.green,
+            unselectedLabelColor: Colors.grey,
           ),
         ),
 

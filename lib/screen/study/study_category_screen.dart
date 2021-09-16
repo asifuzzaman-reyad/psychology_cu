@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/screen/study/upload/screen/upload_pdf_screen.dart';
 
 import 'course_category_card.dart';
-
 
 class StudyCategoryScreen extends StatefulWidget {
   const StudyCategoryScreen({
@@ -25,7 +23,6 @@ class StudyCategoryScreen extends StatefulWidget {
 }
 
 class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
-
   @override
   Widget build(BuildContext context) {
     var reference = FirebaseFirestore.instance
@@ -36,22 +33,8 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
         .collection(widget.courseCategory);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => UploadPdfScreen(
-                year: widget.year,
-                courseType: widget.courseType,
-                courseCode : widget.courseCode,
-                courseCategory : widget.courseCategory
-              )));
-        },
-        child: Icon(Icons.add),
-      ),
-
-      //
       body: StreamBuilder<QuerySnapshot>(
-        stream: reference.snapshots(),
+        stream: reference.orderBy('title').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('Something went wrong'));
@@ -71,7 +54,3 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
     );
   }
 }
-
-
-
-

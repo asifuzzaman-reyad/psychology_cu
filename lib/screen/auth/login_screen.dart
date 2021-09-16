@@ -33,13 +33,17 @@ class _LoginScreenState extends State<LoginScreen> {
             key: _formKey,
             child: SingleChildScrollView(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 32),
 
                   Text(
-                    'Login'.toUpperCase(),
+                    'Welcome Back',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Login to get started',
+                    style: TextStyle(fontSize: 16),
                   ),
 
                   SizedBox(height: 32),
@@ -122,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text('Don\'t have an account?'),
                       TextButton(onPressed: (){
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterInfoScreen()));
-                      }, child: Text('Sign Up')),
+                      }, child: Text('Sign Up', style: TextStyle(color: Colors.blue))),
                     ],
                   )
 
