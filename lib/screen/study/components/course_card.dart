@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/models/Course.dart';
-import 'package:psychology_cu/screen/home/components/headline.dart';
-import '../../../constants.dart';
+import '/models/Course.dart';
+import './/screen/home/components/headline.dart';
 import '../study_details_screen.dart';
 
 class CourseCard extends StatelessWidget {
@@ -29,7 +29,10 @@ class CourseCard extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Container(
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width,
+                child: Center(child: CircularProgressIndicator()));
           }
 
           return snapshot.data!.size > 0
@@ -94,21 +97,30 @@ ListView buildCourseList(
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.pink[50],
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          bottomLeft: Radius.circular(8),
-                        ),
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                              '${course.imageUrl}' != ''
-                                  ? '${course.imageUrl}'
-                                  : kNoImage),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    child: CachedNetworkImage(
+                      imageUrl: course.imageUrl.toString(),
+                      fadeInDuration:
+                      const Duration(milliseconds: 500),
+                      imageBuilder: (context, imageProvider) =>
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.pink.shade50,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                )
+
+                            ),
+                          ),
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                      const CupertinoActivityIndicator(),
+                      errorWidget: (context, url, error) =>
+                          Image.asset('assets/images/no_image.png') ,
                     ),
                   ),
                   Expanded(

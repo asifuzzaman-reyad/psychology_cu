@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'theme.dart';
 import 'splash_screen.dart';
 import '../screen/teacher/teacher_details_screen.dart';
-import '../screen/teacher/upload_teacher_information.dart';
 import '../screen/auth/login_screen.dart';
 import '../screen/auth/register_info_screen.dart';
 import '../screen/auth/register_screen.dart';
@@ -20,7 +19,7 @@ import '../screen/teacher/teacher_screen.dart';
 void main() async {
   //status bar transparent
   SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
   // initialize firebase
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,10 +29,12 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((value) => runApp(MyApp()));
+  ]).then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,12 +44,13 @@ class MyApp extends StatelessWidget {
       darkTheme: darkThemeData(context),
       initialRoute: SplashScreen.routeName,
       routes: {
+        
         //
         SplashScreen.routeName: (context) => SplashScreen(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
         RegisterInfoScreen.routeName: (context) => RegisterInfoScreen(),
-        RegisterScreen.routeName: (context) => RegisterScreen(),
+        RegisterScreen.routeName: (context) => const RegisterScreen(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
 
         //
@@ -56,8 +58,6 @@ class MyApp extends StatelessWidget {
 
         TeacherScreen.routeName: (context) => TeacherScreen(),
         TeacherDetailsScreen.routeName: (context) => TeacherDetailsScreen(),
-        UploadTeacherInformation.routeName: (context) =>
-            UploadTeacherInformation(),
 
         StudentScreen.routeName: (context) => StudentScreen(),
         OfficeScreen.routeName: (context) => OfficeScreen(),

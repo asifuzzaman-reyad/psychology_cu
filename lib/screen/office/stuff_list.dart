@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:psychology_cu/widget/custom_button.dart';
 
@@ -45,9 +46,11 @@ class StuffList extends StatelessWidget {
                       ),
                       progressIndicatorBuilder:
                           (context, url, downloadProgress) => CircleAvatar(
-                              radius: 32,
-                              backgroundImage: AssetImage(
-                                  'assets/images/pp_placeholder.png')),
+                        radius: 32,
+                        backgroundImage:
+                            AssetImage('assets/images/pp_placeholder.png'),
+                        child: CupertinoActivityIndicator(),
+                      ),
                       errorWidget: (context, url, error) => CircleAvatar(
                           radius: 32,
                           backgroundImage:

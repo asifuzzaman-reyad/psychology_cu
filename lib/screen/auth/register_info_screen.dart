@@ -5,23 +5,24 @@ import 'package:psychology_cu/screen/auth/login_screen.dart';
 import 'package:psychology_cu/screen/auth/register_screen.dart';
 import 'package:psychology_cu/widget/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../constants.dart';
+import './/constants.dart';
 
 class RegisterInfoScreen extends StatefulWidget {
   static const routeName = 'register_info_screen';
+
+  const RegisterInfoScreen({Key? key}) : super(key: key);
   @override
   _RegisterInfoScreenState createState() => _RegisterInfoScreenState();
 }
 
 class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _idField = TextEditingController();
-  TextEditingController _verifyField = TextEditingController();
-  TextEditingController _mobileField = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _idField = TextEditingController();
+  final TextEditingController _verifyField = TextEditingController();
+  final TextEditingController _mobileField = TextEditingController();
 
-  var _selectedBatch;
-  var _selectedHall;
+  String? _selectedBatch;
+  String? _selectedHall;
 
   bool _isLoading = false;
 
@@ -39,50 +40,55 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Help center'),
+                              const Text('Help center'),
                               IconButton(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                icon: Icon(Icons.clear),
+                                icon: const Icon(Icons.clear),
                               )
                             ],
                           ),
-                          titlePadding: EdgeInsets.only(left: 16),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                          titlePadding: const EdgeInsets.only(left: 16),
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 16),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
+                              const Text(
                                   'Like our page and send a message with your Name, Batch and Student id. We will send code as soon as possible.'),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               OutlinedButton.icon(
                                   onPressed: () async {
                                     await canLaunch(kFbGroup)
                                         ? await launch(kFbGroup)
                                         : throw 'Could not launch $kFbGroup';
                                   },
-                                  icon: Icon(Icons.facebook, color: Colors.blue),
-                                  label: Text('Get Code with Facebook')),
-
+                                  icon: const Icon(Icons.facebook,
+                                      color: Colors.blue),
+                                  label: const Text('Get Code with Facebook')),
                               Row(
                                 children: [
-                                  Expanded(child: Container(height: 1, color: Colors.grey)),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                  Expanded(
+                                      child: Container(
+                                          height: 1, color: Colors.grey)),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
                                     child: Text('OR'),
                                   ),
-                                  Expanded(child: Container(height: 1, color: Colors.grey)),
+                                  Expanded(
+                                      child: Container(
+                                          height: 1, color: Colors.grey)),
                                 ],
                               ),
-                              Text('Contact with Developer'),
-                              SizedBox(height: 16),
+                              const Text('Contact with Developer'),
+                              const SizedBox(height: 16),
                               Container(
                                 color: Colors.transparent,
                                 // width: double.infinity,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
+                                  children: const [
                                     //call
                                     CustomButton(
                                         type: 'tel:',
@@ -110,19 +116,18 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 16),
-
+                              const SizedBox(height: 16),
                             ],
                           ),
                         ));
               },
-              label: Text('Need verify code'),
-              icon: Icon(Icons.help),
+              label: const Text('Need verify code'),
+              icon: const Icon(Icons.help),
             )
           : null,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -130,18 +135,19 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   Text(
                     'Register'.toUpperCase(),
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 32, fontWeight: FontWeight.bold),
                   ),
-                  Text(
+                  const Text(
                     'Verify your identity ',
                     style: TextStyle(fontSize: 16),
                   ),
 
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
                   // batch and id
                   Row(
@@ -149,14 +155,14 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                       Expanded(
                         child: DropdownButtonFormField(
                           value: _selectedBatch,
-                          hint: Text('Choose Batch'),
+                          hint: const Text('Choose Batch'),
                           // isExpanded: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 18, horizontal: 8),
                           ),
-                          onChanged: (value) {
+                          onChanged: (String? value) {
                             setState(() {
                               _selectedBatch = value;
                             });
@@ -173,7 +179,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                           }).toList(),
                         ),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: TextFormField(
                           controller: _idField,
@@ -185,7 +191,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Student Id',
                             border: OutlineInputBorder(),
                           ),
@@ -195,7 +201,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                     ],
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   //verify
                   TextFormField(
@@ -206,14 +212,14 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Student Verification Code',
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   // mobile
                   TextFormField(
@@ -226,26 +232,26 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Mobile Number',
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
                   ),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   // hall
                   DropdownButtonFormField(
                     value: _selectedHall,
-                    hint: Text('Choose Hall'),
+                    hint: const Text('Choose Hall'),
                     // isExpanded: true,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 18, horizontal: 8),
                     ),
-                    onChanged: (value) {
+                    onChanged: (String? value) {
                       setState(() {
                         _selectedHall = value;
                       });
@@ -262,14 +268,14 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                     }).toList(),
                   ),
 
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
                   // button
                   Stack(
                     alignment: Alignment.centerLeft,
                     children: [
                       //button
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         child: MaterialButton(
                           onPressed: () {
@@ -279,7 +285,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                               FirebaseFirestore.instance
                                   .collection('Psychology')
                                   .doc('Verify')
-                                  .collection(_selectedBatch)
+                                  .collection(_selectedBatch!)
                                   .doc(_idField.text)
                                   .get()
                                   .then((DocumentSnapshot documentSnapshot) {
@@ -319,8 +325,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                                     setState(() => _isLoading = false);
                                   }
                                 } else {
-                                  print(
-                                      'Document does not exist on the database');
+                                  // print('Document does not exist on the database');
                                   Fluttertoast.cancel();
                                   Fluttertoast.showToast(
                                       msg: "Student Id not found in Database");
@@ -329,10 +334,10 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                               });
                             }
                           },
-                          child: Text('Next'),
+                          child: const Text('Next'),
                           color: Colors.black87,
                           textColor: Colors.white,
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
                           ),
@@ -344,19 +349,19 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                         padding: const EdgeInsets.only(left: 32),
                         child: Visibility(
                             visible: _isLoading,
-                            child: CircularProgressIndicator(
+                            child: const CircularProgressIndicator(
                               color: Colors.red,
                             )),
                       ),
                     ],
                   ),
 
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Already have an account.'),
+                      const Text('Already have an account.'),
                       TextButton(
                           onPressed: () {
                             Navigator.pushReplacement(
@@ -364,11 +369,12 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => LoginScreen()));
                           },
-                          child: Text('Login Now', style: TextStyle(color: Colors.blue))),
+                          child: const Text('Login Now',
+                              style: TextStyle(color: Colors.blue))),
                     ],
                   ),
 
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),

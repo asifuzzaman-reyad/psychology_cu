@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../teacher/teacher_details_screen.dart';
@@ -74,9 +75,11 @@ class TeacherScreen extends StatelessWidget {
                       child: Card(
                         margin: EdgeInsets.zero,
                         elevation: 4,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
                           child: Row(
                             children: [
                               Hero(
@@ -94,7 +97,8 @@ class TeacherScreen extends StatelessWidget {
                                       CircleAvatar(
                                           radius: 32,
                                           backgroundImage: AssetImage(
-                                              'assets/images/pp_placeholder.png')),
+                                              'assets/images/pp_placeholder.png'),
+                                          child: CupertinoActivityIndicator()),
                                   errorWidget: (context, url, error) =>
                                       CircleAvatar(
                                           radius: 32,
@@ -107,14 +111,13 @@ class TeacherScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(teacher.get('name'),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                          fontSize: 20,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.bold)),
                                   SizedBox(height: 8),
-                                  Text(teacher.get('post'),
-                                      style: TextStyle(
-                                        // color: Colors.black54,
-                                      )),
+                                  Text(teacher.get('post'), style: TextStyle()),
                                 ],
                               )
                             ],

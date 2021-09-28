@@ -1,9 +1,11 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:psychology_cu/constants.dart';
-import 'screen/auth/login_screen.dart';
+import 'package:psychology_cu/screen/auth/register_info_screen.dart';
+
 import 'screen/dashboard/dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       Duration(seconds: 2),
       () => Navigator.pushReplacementNamed(context,
-          user != null ? DashboardScreen.routeName : LoginScreen.routeName),
+          user != null ? DashboardScreen.routeName : RegisterInfoScreen.routeName),
     );
   }
 
