@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/screen/student/all_batch.dart';
+import './/screen/student/all_batch.dart';
 
 class StudentScreen extends StatelessWidget {
   static const routeName = 'student_screen';
@@ -19,8 +20,9 @@ class StudentScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: MaterialButton(
-              color: Colors.pink[100],
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                color: Colors.pink[100],
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AllBatch()));
@@ -98,36 +100,44 @@ class StudentCard extends StatelessWidget {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
+                  //name
                   Text(
                     student.get('name'),
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
+
+                  //id
                   Text('Student Id', style: TextStyle(fontSize: 12)),
                   Text(
                     student.get('id'),
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
-                  student.get('hall') == '' || student.get('hall') == 'Info not available'
-                    ? Text('')
-                    : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Hall', style: TextStyle(fontSize: 12)),
-                        Text(
-                          student.get('hall'),
-                          maxLines: 2,
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+
+                  //hall
+                  student.get('hall') == '' ||
+                          student.get('hall') == 'Info not available'
+                      ? Text('')
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Hall', style: TextStyle(fontSize: 12)),
+                            Text(
+                              student.get('hall'),
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
                 ],
               ),
             ),
 
             SizedBox(width: 8),
+
             //image
             Expanded(
               flex: 2,
@@ -139,13 +149,10 @@ class StudentCard extends StatelessWidget {
                   imageUrl: student.get('imageUrl'),
                   fadeInDuration: Duration(milliseconds: 500),
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child:
-                              Image.asset('assets/images/pp_placeholder.png')),
+                      CupertinoActivityIndicator(),
                   errorWidget: (context, url, error) => ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.asset('assets/images/pp_placeholder.png')),
+                      child: Image.asset('assets/images/pp_placeholder.png', fit: BoxFit.cover,)),
                 ),
               ),
             )

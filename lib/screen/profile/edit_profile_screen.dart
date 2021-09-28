@@ -2,14 +2,13 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:psychology_cu/constants.dart';
-import 'package:psychology_cu/firebase/firebase_api.dart';
+import './/constants.dart';
+import './/firebase/firebase_api.dart';
 
 class EditProfileScreen extends StatefulWidget {
   EditProfileScreen(
@@ -32,7 +31,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
 
-  var _selectedHall ;
+  var _selectedHall;
+
+  @override
+  void initState() {
+    _selectedHall = widget.snapshot.get('hall');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,9 +150,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   hint: Text('Change Hall Name'),
                   // isExpanded: true,
                   decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 12)
-                  ),
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 18, horizontal: 12)),
                   onChanged: (value) {
                     setState(() {
                       _selectedHall = value;
@@ -194,7 +199,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   .update({
                                 'name': _nameController.text,
                                 'mobile': _mobileController.text,
-                                'hall': _selectedHall == null ? widget.snapshot.get('hall') : _selectedHall,
+                                'hall': _selectedHall == null
+                                    ? widget.snapshot.get('hall')
+                                    : _selectedHall,
                               }).whenComplete(() {
                                 setState(() {
                                   _isLoading = false;
@@ -243,7 +250,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final path = pickImage.files.single.path;
 
     File? croppedFile = await ImageCropper.cropImage(
-        sourcePath: path,
+        sourcePath: path!,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,
@@ -314,7 +321,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     print('Download-Link: $downloadedUrl');
 
     // cloud fire store
-    FirebaseFirestore.instance.collection('Psychology')
+    FirebaseFirestore.instance
+        .collection('Psychology')
         .doc('Students')
         .collection(batch)
         .doc(id)

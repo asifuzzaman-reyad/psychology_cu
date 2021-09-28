@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:psychology_cu/screen/home/components/headline.dart';
-import 'package:psychology_cu/widget/custom_button.dart';
-
+import './/screen/home/components/headline.dart';
+import './/widget/custom_button.dart';
 
 class CrList extends StatelessWidget {
   CrList({required this.year});
@@ -45,7 +45,8 @@ class CrList extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8)),
                   elevation: 3,
                   child: Theme(
-                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    data: Theme.of(context)
+                        .copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
                       tilePadding: EdgeInsets.all(8),
 
@@ -53,10 +54,21 @@ class CrList extends StatelessWidget {
                       leading: CachedNetworkImage(
                         imageUrl: document.get('imageUrl'),
                         fadeInDuration: Duration(milliseconds: 500),
-                        imageBuilder: (context, imageProvider) => CircleAvatar(backgroundImage: imageProvider, radius: 32,),
-                        progressIndicatorBuilder: (context, url, downloadProgress) =>
-                            CircleAvatar(radius: 32,backgroundImage: AssetImage('assets/images/pp_placeholder.png')),
-                        errorWidget: (context, url, error) => CircleAvatar(radius: 32,backgroundImage: AssetImage('assets/images/pp_placeholder.png')),
+                        imageBuilder: (context, imageProvider) => CircleAvatar(
+                          backgroundImage: imageProvider,
+                          radius: 32,
+                        ),
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => CircleAvatar(
+                          radius: 32,
+                          backgroundImage:
+                              AssetImage('assets/images/pp_placeholder.png'),
+                          child: CupertinoActivityIndicator(),
+                        ),
+                        errorWidget: (context, url, error) => CircleAvatar(
+                            radius: 32,
+                            backgroundImage:
+                                AssetImage('assets/images/pp_placeholder.png')),
                       ),
 
                       //
@@ -147,7 +159,7 @@ class CrList extends StatelessWidget {
   }
 
   //
-  uploadCrData(){
+  uploadCrData() {
     FirebaseFirestore.instance.collection('Cr').doc().set({
       'name': '',
       'session': '',
@@ -162,5 +174,4 @@ class CrList extends StatelessWidget {
       Fluttertoast.showToast(msg: 'Upload successful');
     });
   }
-
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:psychology_cu/screen/home/components/headline.dart';
-import 'package:psychology_cu/screen/home/header.dart';
 import 'package:psychology_cu/widget/custom_button.dart';
 
 class CommunityScreen extends StatelessWidget {

@@ -28,7 +28,7 @@ class CustomDrawer extends StatelessWidget {
                         // borderRadius: BorderRadius.circular(8),
                         color: Colors.pink.shade100,
                         image: DecorationImage(
-                          fit: BoxFit.cover,
+                            fit: BoxFit.cover,
                             image: AssetImage('assets/images/reyad.jpg'))),
                   ),
                   SizedBox(height: 16),
@@ -42,8 +42,8 @@ class CustomDrawer extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
                           color: Colors.orange[100],
@@ -51,14 +51,13 @@ class CustomDrawer extends StatelessWidget {
                         child: Text(
                           kDeveloperBatch,
                           style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black),
+                              fontWeight: FontWeight.w500, color: Colors.black),
                         ),
                       ),
                       SizedBox(width: 8),
                       Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
                           color: Colors.greenAccent[100],
@@ -66,8 +65,7 @@ class CustomDrawer extends StatelessWidget {
                         child: Text(
                           kDeveloperSession,
                           style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black),
+                              fontWeight: FontWeight.w500, color: Colors.black),
                         ),
                       ),
                     ],
@@ -124,8 +122,10 @@ class CustomDrawer extends StatelessWidget {
                       children: [
                         contributorCard('Khadija Ujma', '16-17', 'ujma.jpg'),
                         contributorCard('Bibi Hazera', '18-19', 'hazera.jpg'),
-                        contributorCard('Afzal Hossain Hridoy', '17-18','hridoy.jpg'),
-                        contributorCard('Azizul Hakim Shojol', '17-18', 'sojol.jpg'),
+                        contributorCard(
+                            'Afzal Hossain Hridoy', '17-18', 'hridoy.jpg'),
+                        contributorCard(
+                            'Azizul Hakim Shojol', '17-18', 'sojol.jpg'),
                       ],
                     ),
                   ),
@@ -138,11 +138,11 @@ class CustomDrawer extends StatelessWidget {
                             ? await launch(kFbGroup)
                             : throw 'Could not launch $kFbGroup';
                       },
-                      label: Text('Need Help'),
                       icon: Icon(Icons.help),
+                      label: Text('Help center'),
                     ),
                   ),
-
+                  // SizedBox(height: 8),
                 ],
               ),
             ],
@@ -156,7 +156,9 @@ class CustomDrawer extends StatelessWidget {
   Widget contributorCard(String name, String session, String imageName) {
     return Column(
       children: [
-        CircleAvatar(radius: 24, backgroundImage: AssetImage('assets/images/'+imageName)),
+        CircleAvatar(
+            radius: 24,
+            backgroundImage: AssetImage('assets/images/' + imageName)),
         SizedBox(height: 8),
         Text(
           name,

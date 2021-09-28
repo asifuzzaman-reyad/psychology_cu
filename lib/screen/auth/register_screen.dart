@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final path = pickImage.files.single.path;
 
     File? croppedFile = await ImageCropper.cropImage(
-        sourcePath: path,
+        sourcePath: path!,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,
