@@ -2,21 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import '/screen/home/categories.dart';
+
 import '/screen/home/header.dart';
-import '/screen/home/important_links.dart';
-import '../home/components/custom_appbar.dart';
 import '../home/components/custom_drawer.dart';
+import '../home/components/home_appbar.dart';
+import 'components/categories.dart';
 import 'components/headline.dart';
-import 'components/link_card.dart';
+import 'components/important_links.dart';
+import 'widgets/link_card.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = 'home_screen';
 
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppbar(context),
+      appBar: homeAppbar(context),
       drawer: CustomDrawer(),
       body: SingleChildScrollView(
         child: Padding(
@@ -27,20 +30,20 @@ class HomeScreen extends StatelessWidget {
               // header
               Header(),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // categories
               Categories(),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               //important links
               ImportantLinks(),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               //collection links
-              CollectionLinks(),
+              const CollectionLinks(),
 
               // collections
             ],
@@ -53,6 +56,8 @@ class HomeScreen extends StatelessWidget {
 
 // collection links
 class CollectionLinks extends StatelessWidget {
+  const CollectionLinks({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -60,7 +65,7 @@ class CollectionLinks extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //category title
-        Headline(title: 'Google Drive links'),
+        const Headline(title: 'Google Drive links'),
 
         //
         StreamBuilder<DocumentSnapshot>(
@@ -70,24 +75,23 @@ class CollectionLinks extends StatelessWidget {
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Center(child: Text('Something wrong'));
+              return const Center(child: Text('Something wrong'));
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             return GridView.count(
               shrinkWrap: true,
               primary: true,
               // scrollDirection: Axis.horizontal,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 4,
               childAspectRatio: .9,
               crossAxisSpacing: 8,
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               children: [
-
                 // drive link
                 LinkCard(
                   title: '1st Year',
@@ -113,7 +117,6 @@ class CollectionLinks extends StatelessWidget {
                   imageUrl: 'assets/logo/google_drive.png',
                   enableBorder: true,
                 ),
-
               ],
             );
           },
@@ -122,5 +125,3 @@ class CollectionLinks extends StatelessWidget {
     );
   }
 }
-
-

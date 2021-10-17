@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/screen/study/study_category_screen.dart';
 
+import '/screen/study/study_category_screen.dart';
 import 'notes_screen.dart';
 
 class StudyDetailsScreen extends StatefulWidget {
   const StudyDetailsScreen({
+    key,
     required this.year,
     required this.courseType,
     required this.courseTitle,
     required this.courseCode,
-  });
+  }) : super(key: key);
 
   final String year;
   final String courseType;
@@ -29,10 +30,10 @@ class _StudyDetailsScreenState extends State<StudyDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('${widget.courseTitle} (${widget.courseCode})'),
-          // '${widget.courseCode} (${widget.courseTitle})'),
+          // '${widgets.courseCode} (${widgets.courseTitle})'),
           titleSpacing: 0,
           centerTitle: true,
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(text: 'Notes'),
               Tab(text: 'Books'),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:psychology_cu/screen/notice/notice_screen.dart';
 
-AppBar customAppbar(context) {
+import '/screen/notice/notice_screen.dart';
+
+AppBar homeAppbar(context) {
   return AppBar(
     elevation: 0,
     titleSpacing: 8,
@@ -16,13 +17,13 @@ AppBar customAppbar(context) {
                   color: Theme.of(context).colorScheme.primary),
               onPressed: () => Scaffold.of(context).openDrawer()),
         ),
-        Text.rich(
+        const Text.rich(
           TextSpan(
-            text: 'PSYCHO',
+            text: 'PSY ',
             // style: TextStyle(color: Colors.black),
             children: [
               TextSpan(
-                text: 'LOGY',
+                text: 'ASSISTANT',
                 style: TextStyle(color: Colors.orange),
               )
             ],

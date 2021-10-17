@@ -7,7 +7,7 @@ class Header extends StatelessWidget {
       .collection('Users')
       .doc(FirebaseAuth.instance.currentUser!.uid.toString());
   final studentRef =
-  FirebaseFirestore.instance.collection('Psychology').doc('Students');
+      FirebaseFirestore.instance.collection('Psychology').doc('Students');
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,11 @@ class Header extends StatelessWidget {
             stream: userRef.snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Center(child: Text('Something went wrong'));
+                return const Center(child: Text('Something went wrong'));
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // return Center(child: CircularProgressIndicator());
-                return Center(child: Text(''));
+                return const Center(child: Text(''));
               }
 
               var batch = snapshot.data!.get('batch').toString();
@@ -35,12 +35,12 @@ class Header extends StatelessWidget {
                 stream: studentRef.collection(batch).doc(id).snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return Center(child: Text('Something went wrong'));
+                    return const Center(child: Text('Something went wrong'));
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // return Center(child: CircularProgressIndicator());
-                    return Center(
+                    return const Center(
                       child: Text(
                         '',
                         style: TextStyle(fontSize: 24),
@@ -52,8 +52,8 @@ class Header extends StatelessWidget {
                   return Text(
                     snapshot.data!.get('name').toString().toUpperCase(),
                     // 'Explore your life'.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 24,
+                    style: const TextStyle(
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -62,10 +62,11 @@ class Header extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: 4),
-          Text(
+          const SizedBox(height: 4),
+          const Text(
             'Welcome to psychology family',
-            style: TextStyle(fontSize: 16,
+            style: TextStyle(
+              fontSize: 16,
               // color: Colors.black87,
             ),
           ),

@@ -49,7 +49,7 @@ Widget pdfView(String fileUrl, bool darkMode) {
             alignment: Alignment.center,
             children: [
               CircularProgressIndicator(),
-              Text('${progress.toStringAsFixed(0)}'),
+              Text(progress.toStringAsFixed(0)),
             ],
           ),
           SizedBox(width: 12),

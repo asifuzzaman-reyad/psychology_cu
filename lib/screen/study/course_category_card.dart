@@ -5,7 +5,7 @@ import 'components/pdf_view_screen.dart';
 import 'models/courses.dart';
 
 class CourseCategoryCard extends StatefulWidget {
-  CourseCategoryCard({
+  const CourseCategoryCard({
     required this.subtitle,
     required this.snapshot,
     this.ref,

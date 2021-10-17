@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/widget/custom_button.dart';
+
+import '/widgets/custom_button.dart';
 
 class StuffList extends StatelessWidget {
+  const StuffList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,11 +19,11 @@ class StuffList extends StatelessWidget {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Text('Something went wrong');
+            return const Text('Something went wrong');
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           return ListView(
@@ -28,30 +31,31 @@ class StuffList extends StatelessWidget {
             children: snapshot.data!.docs.map((DocumentSnapshot document) {
               print(document);
               return Card(
-                margin: EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
                 elevation: 3,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: new ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                     leading: CachedNetworkImage(
                       imageUrl: document.get('imageUrl'),
-                      fadeInDuration: Duration(milliseconds: 500),
+                      fadeInDuration: const Duration(milliseconds: 500),
                       imageBuilder: (context, imageProvider) => CircleAvatar(
                         backgroundImage: imageProvider,
                         radius: 32,
                       ),
                       progressIndicatorBuilder:
-                          (context, url, downloadProgress) => CircleAvatar(
+                          (context, url, downloadProgress) =>
+                              const CircleAvatar(
                         radius: 32,
                         backgroundImage:
                             AssetImage('assets/images/pp_placeholder.png'),
                         child: CupertinoActivityIndicator(),
                       ),
-                      errorWidget: (context, url, error) => CircleAvatar(
+                      errorWidget: (context, url, error) => const CircleAvatar(
                           radius: 32,
                           backgroundImage:
                               AssetImage('assets/images/pp_placeholder.png')),
@@ -61,7 +65,7 @@ class StuffList extends StatelessWidget {
                     ),
                     subtitle: Text(
                       document.get('post'),
-                      style: TextStyle(color: Colors.teal),
+                      style: const TextStyle(color: Colors.teal),
                     ),
                     trailing: CustomButton(
                       type: 'tel:',

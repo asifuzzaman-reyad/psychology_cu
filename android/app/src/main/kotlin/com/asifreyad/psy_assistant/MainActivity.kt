@@ -1,4 +1,4 @@
-package com.example.psychology_cu
+package com.asifreyad.psy_assistant
 
 import io.flutter.embedding.android.FlutterActivity
 

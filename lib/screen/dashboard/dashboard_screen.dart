@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/screen/profile/profile_screen.dart';
-import 'package:psychology_cu/screen/study/study_screen.dart';
+
+import '/screen/profile/profile_screen.dart';
+import '/screen/study/study_screen.dart';
 import '../home/home_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = 'dashboard_screen';
+
+  const DashboardScreen({Key? key}) : super(key: key);
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-
   @override
   void initState() {
     super.initState();
-
   }
+
   int _currentIndex = 0;
-  List _pages = [HomeScreen(), StudyScreen(), ProfileScreen()];
+  final List _pages = [const HomeScreen(), StudyScreen(), ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(
             label: 'Home',
             icon: Icon(Icons.home),
@@ -51,6 +53,4 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: _pages[_currentIndex],
     );
   }
-
 }
-

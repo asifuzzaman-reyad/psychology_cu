@@ -7,9 +7,96 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:90459416484:android:0ceda4eb35600623928331",
+        "android_client_info": {
+          "package_name": "com.asifreyad.psy_assistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90459416484-7rrfm3e92j7pp2cbam9ativah433ho7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLuPpgLaOkKGChJuog4k4uV4RaKRsGXYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90459416484-7rrfm3e92j7pp2cbam9ativah433ho7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90459416484:android:3fb6e28d1ff7e9e0928331",
+        "android_client_info": {
+          "package_name": "com.asifreyad.psychology_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90459416484-7rrfm3e92j7pp2cbam9ativah433ho7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLuPpgLaOkKGChJuog4k4uV4RaKRsGXYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90459416484-7rrfm3e92j7pp2cbam9ativah433ho7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:90459416484:android:0ffb0652c94d5771928331",
         "android_client_info": {
           "package_name": "com.example.psychology_cu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90459416484-7rrfm3e92j7pp2cbam9ativah433ho7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLuPpgLaOkKGChJuog4k4uV4RaKRsGXYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90459416484-7rrfm3e92j7pp2cbam9ativah433ho7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90459416484:android:3aecdcfe26d4edc1928331",
+        "android_client_info": {
+          "package_name": "com.example.psychology_cu_admin"
         }
       },
       "oauth_client": [

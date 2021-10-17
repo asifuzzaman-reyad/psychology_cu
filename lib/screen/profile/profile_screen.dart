@@ -4,8 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:psychology_cu/screen/auth/login_screen.dart';
-import 'package:psychology_cu/screen/profile/edit_profile_screen.dart';
+
+import '/screen/auth/login_screen.dart';
+import '/screen/profile/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = 'profile_screen';
@@ -77,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ));
                 },
                 child: Row(
-                  children: [
+                  children: const [
                     Text('Sign Out'),
                     SizedBox(width: 10),
                     Icon(
@@ -120,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }
 
                     //
-                    return Container(
+                    return SizedBox(
                       width: double.infinity,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -180,7 +181,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-
                                     //batch
                                     Container(
                                       padding: EdgeInsets.symmetric(

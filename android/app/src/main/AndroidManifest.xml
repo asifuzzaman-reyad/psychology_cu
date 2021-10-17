@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.psychology_cu">
+    package="com.asifreyad.psy_assistant">
    <application
-        android:label="psychology_cu"
+        android:label="Psy Assistant"
         android:icon="@mipmap/ic_launcher">
 
         <activity

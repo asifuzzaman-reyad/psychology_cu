@@ -1,21 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:psychology_cu/screen/auth/register_info_screen.dart';
-import 'package:psychology_cu/screen/dashboard/dashboard_screen.dart';
-import 'package:psychology_cu/widget/loading.dart';
+
+import '/screen/auth/register_info_screen.dart';
+import '/screen/dashboard/dashboard_screen.dart';
+import '/widgets/loading.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = 'login_screen';
+
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _emailField = TextEditingController();
-  TextEditingController _passwordField = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailField = TextEditingController();
+  final TextEditingController _passwordField = TextEditingController();
 
   bool _isObscure = true;
   var regExp = RegExp(
@@ -27,114 +30,124 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: loading ? Loading() : Container(
-          padding: EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 32),
+        child: loading
+            ? const Loading()
+            : Container(
+                padding: const EdgeInsets.all(16),
+                child: Form(
+                  key: _formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 32),
 
-                  Text(
-                    'Welcome Back',
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Login to get started',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                        const Text(
+                          'Welcome Back',
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold),
+                        ),
+                        const Text(
+                          'Login to get started',
+                          style: TextStyle(fontSize: 16),
+                        ),
 
-                  SizedBox(height: 32),
+                        const SizedBox(height: 32),
 
-                  //email
-                  TextFormField(
-                    controller: _emailField,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Enter your email';
-                      } else if (!regExp.hasMatch(val)) {
-                        return 'Enter valid email';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      border: OutlineInputBorder(),
+                        //email
+                        TextFormField(
+                          controller: _emailField,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Enter your email';
+                            } else if (!regExp.hasMatch(val)) {
+                              return 'Enter valid email';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            hintText: 'Email',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        //password
+                        TextFormField(
+                          controller: _passwordField,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return 'Enter your password';
+                            } else if (val.length < 8) {
+                              return 'Password at least 8 character';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            border: const OutlineInputBorder(),
+                            suffixIcon: GestureDetector(
+                                onTap: () =>
+                                    setState(() => _isObscure = !_isObscure),
+                                child: _isObscure == true
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(
+                                        Icons.visibility_off_outlined)),
+                          ),
+                          obscureText: _isObscure,
+                          keyboardType: TextInputType.text,
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        //button
+                        SizedBox(
+                          width: double.infinity,
+                          child: MaterialButton(
+                            onPressed: () {
+                              //
+                              if (_formKey.currentState!.validate()) {
+                                setState(() => loading = true);
+
+                                //
+                                login(_emailField.text, _passwordField.text);
+                              }
+                            },
+                            child: const Text('Login'),
+                            color: Colors.black87,
+                            textColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Don\'t have an account?'),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const RegisterInfoScreen()));
+                                },
+                                child: const Text('Sign Up',
+                                    style: TextStyle(color: Colors.blue))),
+                          ],
+                        )
+                      ],
                     ),
-                    keyboardType: TextInputType.emailAddress,
                   ),
-
-                  SizedBox(height: 16),
-
-                  //password
-                  TextFormField(
-                    controller: _passwordField,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Enter your password';
-                      } else if (val.length < 8) {
-                        return 'Password at least 8 character';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      border: OutlineInputBorder(),
-                      suffixIcon: GestureDetector(
-                          onTap: () => setState(() => _isObscure = !_isObscure),
-                          child: _isObscure == true
-                              ? Icon(Icons.visibility)
-                              : Icon(Icons.visibility_off_outlined)),
-                    ),
-                    obscureText: _isObscure,
-                    keyboardType: TextInputType.text,
-                  ),
-
-                  SizedBox(height: 32),
-
-                  //button
-                  Container(
-                    width: double.infinity,
-                    child: MaterialButton(
-                      onPressed: () {
-                        //
-                        if (_formKey.currentState!.validate()) {
-                          setState(() => loading = true);
-
-                          //
-                          login(_emailField.text, _passwordField.text);
-
-                        }
-                      },
-                      child: Text('Login'),
-                      color: Colors.black87,
-                      textColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ),
-
-                  SizedBox(height: 8),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Don\'t have an account?'),
-                      TextButton(onPressed: (){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterInfoScreen()));
-                      }, child: Text('Sign Up', style: TextStyle(color: Colors.blue))),
-                    ],
-                  )
-
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -149,14 +162,10 @@ class _LoginScreenState extends State<LoginScreen> {
       var user = userCredential.user;
       print(user);
       if (user != null) {
-
-        setState(() {
-          loading = false;
-          Fluttertoast.showToast(msg: 'Login Successful');
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => DashboardScreen()));
-        });
-
+        setState(() => loading = false);
+        Fluttertoast.showToast(msg: 'Login Successful');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => DashboardScreen()));
       } else {
         setState(() => loading = false);
         print('No user found');

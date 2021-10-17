@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import './/screen/home/components/headline.dart';
-import './/widget/custom_button.dart';
+
+import '/screen/home/components/headline.dart';
+import '/widgets/custom_button.dart';
 
 class CrList extends StatelessWidget {
-  CrList({required this.year});
   final String year;
+  const CrList({Key? key, required this.year}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,11 @@ class CrList extends StatelessWidget {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text('Something went wrong'));
+          return const Center(child: Text('Something went wrong'));
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
 
         return Column(
@@ -31,16 +31,16 @@ class CrList extends StatelessWidget {
           children: [
             //
             Headline(title: year),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
 
             //
             ListView(
               shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 print(document);
                 return Card(
-                  margin: EdgeInsets.only(bottom: 16),
+                  margin: const EdgeInsets.only(bottom: 16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8)),
                   elevation: 3,
@@ -48,42 +48,44 @@ class CrList extends StatelessWidget {
                     data: Theme.of(context)
                         .copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
-                      tilePadding: EdgeInsets.all(8),
+                      tilePadding: const EdgeInsets.all(8),
 
                       //image
                       leading: CachedNetworkImage(
                         imageUrl: document.get('imageUrl'),
-                        fadeInDuration: Duration(milliseconds: 500),
+                        fadeInDuration: const Duration(milliseconds: 500),
                         imageBuilder: (context, imageProvider) => CircleAvatar(
                           backgroundImage: imageProvider,
                           radius: 32,
                         ),
                         progressIndicatorBuilder:
-                            (context, url, downloadProgress) => CircleAvatar(
+                            (context, url, downloadProgress) =>
+                                const CircleAvatar(
                           radius: 32,
                           backgroundImage:
                               AssetImage('assets/images/pp_placeholder.png'),
                           child: CupertinoActivityIndicator(),
                         ),
-                        errorWidget: (context, url, error) => CircleAvatar(
-                            radius: 32,
-                            backgroundImage:
-                                AssetImage('assets/images/pp_placeholder.png')),
+                        errorWidget: (context, url, error) =>
+                            const CircleAvatar(
+                                radius: 32,
+                                backgroundImage: AssetImage(
+                                    'assets/images/pp_placeholder.png')),
                       ),
 
                       //
-                      title: new Text(
+                      title: Text(
                         document.get('name'),
                         maxLines: 1,
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
                               Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(4),
@@ -91,14 +93,14 @@ class CrList extends StatelessWidget {
                                 ),
                                 child: Text(
                                   '${document.get('batch')}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black),
                                 ),
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(4),
@@ -106,14 +108,14 @@ class CrList extends StatelessWidget {
                                 ),
                                 child: Text(
                                   '${document.get('session')}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                         ],
                       ),
                       children: [
@@ -127,7 +129,7 @@ class CrList extends StatelessWidget {
                                 color: Colors.red),
 
                             //facebook
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             CustomButton(
                                 type: '',
                                 link: document.get('facebook').toString(),
@@ -135,18 +137,18 @@ class CrList extends StatelessWidget {
                                 color: Colors.blue),
 
                             // call
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             CustomButton(
                                 type: 'tel:',
                                 link: document.get('mobile'),
                                 icon: Icons.call,
                                 color: Colors.green),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                           ],
                           mainAxisAlignment: MainAxisAlignment.end,
                         ),
                       ],
-                      childrenPadding: EdgeInsets.all(8),
+                      childrenPadding: const EdgeInsets.all(8),
                     ),
                   ),
                 );
@@ -156,22 +158,5 @@ class CrList extends StatelessWidget {
         );
       },
     );
-  }
-
-  //
-  uploadCrData() {
-    FirebaseFirestore.instance.collection('Cr').doc().set({
-      'name': '',
-      'session': '',
-      'batch': 'Batch 1',
-      'year': '4th Year',
-      'mobile': '',
-      'email': '',
-      'facebook': '',
-      'imageUrl': '',
-    }).whenComplete(() {
-      Fluttertoast.cancel();
-      Fluttertoast.showToast(msg: 'Upload successful');
-    });
   }
 }

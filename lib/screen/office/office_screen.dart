@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/screen/office/stuff_list.dart';
+
+import '/screen/office/stuff_list.dart';
 import 'cr_list.dart';
 
 class OfficeScreen extends StatelessWidget {
@@ -14,7 +15,7 @@ class OfficeScreen extends StatelessWidget {
           title: Text('CR & Office Stuff'),
           centerTitle: true,
           bottom: TabBar(
-            tabs: [
+            tabs: const [
               Tab(text: 'Class Representative'),
               Tab(text: 'Office Stuff'),
             ],
@@ -23,7 +24,6 @@ class OfficeScreen extends StatelessWidget {
             unselectedLabelColor: Colors.grey,
           ),
         ),
-
         body: TabBarView(
           children: [
             //cr list

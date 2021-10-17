@@ -1,9 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'theme.dart';
-import 'splash_screen.dart';
-import '../screen/teacher/teacher_details_screen.dart';
+
 import '../screen/auth/login_screen.dart';
 import '../screen/auth/register_info_screen.dart';
 import '../screen/auth/register_screen.dart';
@@ -14,7 +12,10 @@ import '../screen/office/office_screen.dart';
 import '../screen/profile/profile_screen.dart';
 import '../screen/student/student_screen.dart';
 import '../screen/study/study_screen.dart';
+import '../screen/teacher/teacher_details_screen.dart';
 import '../screen/teacher/teacher_screen.dart';
+import 'splash_screen.dart';
+import 'theme.dart';
 
 void main() async {
   //status bar transparent
@@ -44,24 +45,24 @@ class MyApp extends StatelessWidget {
       darkTheme: darkThemeData(context),
       initialRoute: SplashScreen.routeName,
       routes: {
-        
         //
-        SplashScreen.routeName: (context) => SplashScreen(),
+        SplashScreen.routeName: (context) => const SplashScreen(),
         DashboardScreen.routeName: (context) => DashboardScreen(),
-        LoginScreen.routeName: (context) => LoginScreen(),
-        RegisterInfoScreen.routeName: (context) => RegisterInfoScreen(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
+        RegisterInfoScreen.routeName: (context) => const RegisterInfoScreen(),
         RegisterScreen.routeName: (context) => const RegisterScreen(),
         ProfileScreen.routeName: (context) => ProfileScreen(),
 
         //
-        HomeScreen.routeName: (context) => HomeScreen(),
+        HomeScreen.routeName: (context) => const HomeScreen(),
 
         TeacherScreen.routeName: (context) => TeacherScreen(),
-        TeacherDetailsScreen.routeName: (context) => TeacherDetailsScreen(),
+        TeacherDetailsScreen.routeName: (context) =>
+            const TeacherDetailsScreen(),
 
         StudentScreen.routeName: (context) => StudentScreen(),
         OfficeScreen.routeName: (context) => OfficeScreen(),
-        CommunityScreen.routeName: (context) => CommunityScreen(),
+        CommunityScreen.routeName: (context) => const CommunityScreen(),
 
         //
         StudyScreen.routeName: (context) => StudyScreen(),

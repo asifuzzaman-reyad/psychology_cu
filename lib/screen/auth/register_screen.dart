@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,28 +8,31 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:psychology_cu/firebase/firebase_api.dart';
-import 'package:psychology_cu/screen/dashboard/dashboard_screen.dart';
-import 'package:psychology_cu/widget/loading.dart';
+
+import '/firebase/firebase_api.dart';
+import '/screen/dashboard/dashboard_screen.dart';
+import '/widgets/loading.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = 'register_screen';
 
-  const RegisterScreen({this.batch, this.id, this.mobile, this.hall});
   final String? batch;
   final String? id;
   final String? mobile;
   final String? hall;
+
+  const RegisterScreen({Key? key, this.batch, this.id, this.mobile, this.hall})
+      : super(key: key);
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _emailField = TextEditingController();
-  TextEditingController _passwordField = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailField = TextEditingController();
+  final TextEditingController _passwordField = TextEditingController();
 
   var regExp = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -58,13 +62,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
           CropAspectRatioPreset.ratio4x3,
           CropAspectRatioPreset.ratio16x9
         ],
-        androidUiSettings: AndroidUiSettings(
+        androidUiSettings: const AndroidUiSettings(
             toolbarTitle: 'Cropper',
             toolbarColor: Colors.deepOrange,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
+        iosUiSettings: const IOSUiSettings(
           minimumAspectRatio: 1.0,
         ));
 
@@ -93,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         CropAspectRatioPreset.ratio4x3,
         CropAspectRatioPreset.ratio16x9
       ],
-      androidUiSettings: AndroidUiSettings(
+      androidUiSettings: const AndroidUiSettings(
         toolbarTitle: 'Cropper',
         toolbarColor: Colors.deepOrange,
         toolbarWidgetColor: Colors.white,
@@ -113,28 +117,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: SafeArea(
         child: loading
-            ? Loading()
+            ? const Loading()
             : Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Form(
                   key: _formKey,
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
 
                         Text(
                           'Register '.toUpperCase(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 32, fontWeight: FontWeight.bold),
                         ),
-                        Text(
+                        const Text(
                           'Create new account',
                           style: TextStyle(fontSize: 16),
                         ),
 
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
 
                         //image pick
                         Container(
@@ -146,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Container(
                                 height: 170,
                                 width: 170,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Colors.white,
                                 ),
@@ -154,7 +158,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ? ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(100),
-                                        child: Image.asset('assets/images/pp_placeholder.png',
+                                        child: Image.asset(
+                                            'assets/images/pp_placeholder.png',
                                             fit: BoxFit.cover))
                                     : ClipRRect(
                                         borderRadius:
@@ -168,10 +173,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 padding: const EdgeInsets.only(right: 16),
                                 child: MaterialButton(
                                   onPressed: () => pickImage(),
-                                  child: Icon(Icons.camera),
-                                  shape: CircleBorder(),
+                                  child: const Icon(Icons.camera),
+                                  shape: const CircleBorder(),
                                   color: Colors.grey.shade300,
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   minWidth: 24,
                                 ),
                               ),
@@ -179,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
 
-                        SizedBox(height: 32),
+                        const SizedBox(height: 32),
 
                         //email
                         TextFormField(
@@ -192,14 +197,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }
                             return null;
                           },
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Email',
                             border: OutlineInputBorder(),
                           ),
                           keyboardType: TextInputType.emailAddress,
                         ),
 
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
 
                         //password
                         TextFormField(
@@ -214,22 +219,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                           decoration: InputDecoration(
                             hintText: 'Password',
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                             suffixIcon: GestureDetector(
                                 onTap: () =>
                                     setState(() => _isObscure = !_isObscure),
                                 child: _isObscure == true
-                                    ? Icon(Icons.visibility)
-                                    : Icon(Icons.visibility_off_outlined)),
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(
+                                        Icons.visibility_off_outlined)),
                           ),
                           obscureText: _isObscure,
                           keyboardType: TextInputType.text,
                         ),
 
-                        SizedBox(height: 32),
+                        const SizedBox(height: 32),
 
                         //button
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: MaterialButton(
                             onPressed: () {
@@ -244,30 +250,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 register(_emailField.text, _passwordField.text);
                               }
                             },
-                            child: Text('Create new account'),
+                            child: const Text('Create new account'),
                             color: Colors.black87,
                             textColor: Colors.white,
-                            padding: EdgeInsets.symmetric(vertical: 16),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
                             ),
                           ),
                         ),
 
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Already have an account.'),
+                            const Text('Already have an account.'),
                             TextButton(
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => LoginScreen()));
+                                          builder: (context) =>
+                                              const LoginScreen()));
                                 },
-                                child: Text('Login now', style: TextStyle(color: Colors.blue))),
+                                child: const Text('Login now',
+                                    style: TextStyle(color: Colors.blue))),
                           ],
                         )
                       ],
@@ -299,7 +307,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         //
         setState(() => loading = false);
         Fluttertoast.showToast(msg: 'Registration successful');
-        Navigator.pushNamedAndRemoveUntil(this.context, DashboardScreen.routeName, ((Route<dynamic> route) => false));
+        Navigator.pushNamedAndRemoveUntil(context, DashboardScreen.routeName,
+            ((Route<dynamic> route) => false));
       } else {
         Fluttertoast.showToast(msg: 'Registration failed');
         setState(() => loading = false);

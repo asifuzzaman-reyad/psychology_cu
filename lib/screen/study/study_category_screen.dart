@@ -5,12 +5,13 @@ import 'course_category_card.dart';
 
 class StudyCategoryScreen extends StatefulWidget {
   const StudyCategoryScreen({
+    key,
     required this.courseCode,
     required this.year,
     required this.courseType,
     required this.courseCategory,
     required this.subtitle,
-  });
+  }) : super(key: key);
 
   final String year;
   final String courseCode;
@@ -37,18 +38,18 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
         stream: reference.orderBy('title').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong'));
+            return const Center(child: Text('Something went wrong'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           // Course Category Card
           return snapshot.data!.size > 0
               ? CourseCategoryCard(
                   subtitle: widget.subtitle, snapshot: snapshot, ref: reference)
-              : Center(child: Text('No Data found'));
+              : const Center(child: Text('No Data found'));
         },
       ),
     );

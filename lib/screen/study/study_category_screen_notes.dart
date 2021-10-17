@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'course_category_card.dart';
 
 class StudyCategoryScreenNotes extends StatefulWidget {
   const StudyCategoryScreenNotes({
+    key,
     required this.courseCode,
     required this.year,
     required this.courseType,
@@ -11,7 +13,7 @@ class StudyCategoryScreenNotes extends StatefulWidget {
     required this.subtitle,
     required this.chapterNo,
     required this.chapterTitle,
-  });
+  }) : super(key: key);
 
   final String year;
   final String courseCode;
@@ -50,11 +52,11 @@ class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
         stream: reference.orderBy('title').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong'));
+            return const Center(child: Text('Something went wrong'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           // Course Category Card
@@ -64,7 +66,7 @@ class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
                   snapshot: snapshot,
                   ref: reference,
                 )
-              : Center(child: Text('No Data found'));
+              : const Center(child: Text('No Data found'));
         },
       ),
     );

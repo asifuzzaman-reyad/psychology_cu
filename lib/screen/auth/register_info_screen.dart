@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:psychology_cu/screen/auth/login_screen.dart';
-import 'package:psychology_cu/screen/auth/register_screen.dart';
-import 'package:psychology_cu/widget/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '/screen/auth/login_screen.dart';
+import '/screen/auth/register_screen.dart';
+import '/widgets/custom_button.dart';
 import './/constants.dart';
 
 class RegisterInfoScreen extends StatefulWidget {
@@ -367,7 +368,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => LoginScreen()));
+                                    builder: (context) => const LoginScreen()));
                           },
                           child: const Text('Login Now',
                               style: TextStyle(color: Colors.blue))),

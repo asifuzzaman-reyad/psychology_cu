@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:psychology_cu/constants.dart';
+
+import '/constants.dart';
 import 'components/course_card.dart';
 
 class StudyScreen extends StatefulWidget {
   static const routeName = 'study_screen';
+
+  const StudyScreen({Key? key}) : super(key: key);
 
   @override
   _StudyScreenState createState() => _StudyScreenState();
@@ -25,7 +28,7 @@ class _StudyScreenState extends State<StudyScreen> {
       appBar: AppBar(
         // centerTitle: false,
         elevation: 0,
-        title: Text(
+        title: const Text(
           "Study",
           style: TextStyle(
             fontSize: 20,
@@ -53,7 +56,7 @@ class _StudyScreenState extends State<StudyScreen> {
                   onChanged: (String? value) {
                     setState(() {
                       selectedYear = value!;
-                      print(value);
+                      // print(value);
                     });
                   },
                 ),
@@ -72,10 +75,10 @@ class _StudyScreenState extends State<StudyScreen> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Something wrong'));
+            return const Center(child: Text('Something wrong'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           // get batch
@@ -87,10 +90,10 @@ class _StudyScreenState extends State<StudyScreen> {
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Center(child: Text('Something wrong'));
+                return const Center(child: Text('Something wrong'));
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
 
               var year = snapshot.data!.get('year');
@@ -107,18 +110,14 @@ class _StudyScreenState extends State<StudyScreen> {
   // CourseList
   Padding buildCourseList(year) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           //major course
-          CourseCard(
-              year: selectedYear == null ? year : selectedYear,
-              courseType: 'Major Course'),
+          CourseCard(year: selectedYear ?? year, courseType: 'Major Course'),
 
           // related course
-          CourseCard(
-              year: selectedYear == null ? year : selectedYear,
-              courseType: 'Related Course'),
+          CourseCard(year: selectedYear ?? year, courseType: 'Related Course'),
         ]),
       ),
     );

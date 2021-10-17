@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'components/headline.dart';
-import 'components/link_card.dart';
+import '../widgets/link_card.dart';
+import 'headline.dart';
 
 class ImportantLinks extends StatelessWidget {
+  const ImportantLinks({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -13,19 +15,19 @@ class ImportantLinks extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         //category title
-        Headline(title: 'Important links'),
+        const Headline(title: 'Important links'),
 
         //category card grid
         GridView.count(
           shrinkWrap: true,
           primary: false,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 3,
           childAspectRatio: 1,
           mainAxisSpacing: 1,
           crossAxisSpacing: 1,
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-          children: [
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          children: const [
             //cu.com
             LinkCard(
               title: 'University of chittagong',
@@ -58,11 +60,11 @@ class ImportantLinks extends StatelessWidget {
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return Center(child: Text('Something wrong'));
+              return const Center(child: Text('Something wrong'));
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             return StreamBuilder<DocumentSnapshot>(
@@ -72,24 +74,23 @@ class ImportantLinks extends StatelessWidget {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Something wrong'));
+                  return const Center(child: Text('Something wrong'));
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 return GridView.count(
                   shrinkWrap: true,
                   primary: false,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 3,
                   childAspectRatio: 1,
                   mainAxisSpacing: 1,
                   crossAxisSpacing: 1,
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   children: [
-
                     // psychology family
                     LinkCard(
                       title: 'Psychology family, CU Group',
@@ -110,8 +111,6 @@ class ImportantLinks extends StatelessWidget {
                       link: snapshot.data!.get('wa_group'),
                       imageUrl: 'assets/logo/whatsapp.png',
                     ),
-
-
                   ],
                 );
               },

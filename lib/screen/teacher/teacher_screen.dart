@@ -11,6 +11,8 @@ class TeacherScreen extends StatelessWidget {
   final ref =
       FirebaseFirestore.instance.collection('Psychology').doc('Teachers');
 
+  TeacherScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -19,8 +21,8 @@ class TeacherScreen extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
-          title: Text('Teacher Information'),
-          bottom: TabBar(
+          title: const Text('Teacher Information'),
+          bottom: const TabBar(
             tabs: [
               Tab(text: 'Present'),
               Tab(text: 'Study Leave'),
@@ -49,21 +51,23 @@ class TeacherScreen extends StatelessWidget {
         stream: ref.collection(status).orderBy('serial').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong'));
+            return const Center(child: Text('Something went wrong'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           var data = snapshot.data!.docs;
           return snapshot.data!.size == 0
-              ? Center(child: Text('No data found'))
+              ? const Center(child: Text('No data found'))
               : ListView.separated(
                   shrinkWrap: true,
                   itemCount: data.length,
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  separatorBuilder: (context, index) => SizedBox(height: 16),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 16),
                   itemBuilder: (BuildContext context, int index) {
                     //
                     var teacher = data[index];
@@ -86,7 +90,8 @@ class TeacherScreen extends StatelessWidget {
                                 tag: teacher.get('name'),
                                 child: CachedNetworkImage(
                                   imageUrl: teacher.get('imageUrl'),
-                                  fadeInDuration: Duration(milliseconds: 500),
+                                  fadeInDuration:
+                                      const Duration(milliseconds: 500),
                                   imageBuilder: (context, imageProvider) =>
                                       CircleAvatar(
                                     backgroundImage: imageProvider,
@@ -94,30 +99,31 @@ class TeacherScreen extends StatelessWidget {
                                   ),
                                   progressIndicatorBuilder: (context, url,
                                           downloadProgress) =>
-                                      CircleAvatar(
+                                      const CircleAvatar(
                                           radius: 32,
                                           backgroundImage: AssetImage(
                                               'assets/images/pp_placeholder.png'),
                                           child: CupertinoActivityIndicator()),
                                   errorWidget: (context, url, error) =>
-                                      CircleAvatar(
+                                      const CircleAvatar(
                                           radius: 32,
                                           backgroundImage: AssetImage(
                                               'assets/images/pp_placeholder.png')),
                                 ),
                               ),
-                              SizedBox(width: 16),
+                              const SizedBox(width: 16),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(teacher.get('name'),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold)),
-                                  SizedBox(height: 8),
-                                  Text(teacher.get('post'), style: TextStyle()),
+                                  const SizedBox(height: 8),
+                                  Text(teacher.get('post'),
+                                      style: const TextStyle()),
                                 ],
                               )
                             ],

@@ -11,7 +11,7 @@ import './/constants.dart';
 import './/firebase/firebase_api.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  EditProfileScreen(
+  const EditProfileScreen(
       {required this.batch, required this.id, required this.snapshot});
   final String batch;
   final String id;
@@ -27,9 +27,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool isTaskActive = false;
   bool _isLoading = false;
 
-  GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _mobileController = TextEditingController();
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
 
   var _selectedHall;
 
@@ -199,9 +199,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   .update({
                                 'name': _nameController.text,
                                 'mobile': _mobileController.text,
-                                'hall': _selectedHall == null
-                                    ? widget.snapshot.get('hall')
-                                    : _selectedHall,
+                                'hall': _selectedHall ?? widget.snapshot.get('hall'),
                               }).whenComplete(() {
                                 setState(() {
                                   _isLoading = false;
@@ -332,7 +330,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
       Fluttertoast.cancel();
       Fluttertoast.showToast(msg: 'Update successful');
-      Navigator.pop(this.context);
+      Navigator.pop(context);
     });
   }
 }

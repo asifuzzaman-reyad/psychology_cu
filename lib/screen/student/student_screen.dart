@@ -79,7 +79,7 @@ class StudentScreen extends StatelessWidget {
 
 // student card
 class StudentCard extends StatelessWidget {
-  StudentCard({required this.student});
+  const StudentCard({required this.student});
   final QueryDocumentSnapshot student;
 
   @override

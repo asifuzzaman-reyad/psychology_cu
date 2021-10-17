@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard(
-      {required this.title, required this.color, required this.routeName});
+      {Key? key,
+      required this.title,
+      required this.color,
+      required this.routeName})
+      : super(key: key);
   final String title;
   final Color color;
   final String routeName;
@@ -10,9 +14,9 @@ class CategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () =>  Navigator.pushNamed(context, routeName),
+      onTap: () => Navigator.pushNamed(context, routeName),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(16),
@@ -33,7 +37,7 @@ class CategoryCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -51,7 +55,7 @@ class CategoryCard extends StatelessWidget {
                 heroTag: routeName,
                 onPressed: () => Navigator.pushNamed(context, routeName),
                 backgroundColor: Colors.white,
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_forward_ios_rounded,
                   // color: Colors.black,
                 ),

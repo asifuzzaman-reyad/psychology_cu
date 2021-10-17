@@ -79,7 +79,7 @@ class _BatchInformationState extends State<BatchInformation> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             }
-            if (snapshot.data!.docs.length == 0) {
+            if (snapshot.data!.docs.isEmpty) {
               return Center(child: Text('No Data found'));
             }
 
