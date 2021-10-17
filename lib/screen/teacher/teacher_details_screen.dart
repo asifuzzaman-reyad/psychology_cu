@@ -71,129 +71,148 @@ class TeacherDetailsScreen extends StatelessWidget {
                       topRight: Radius.circular(24),
                     ),
                   ),
-                  padding: const EdgeInsets.only(
-                      bottom: 16, left: 16, right: 16, top: 24),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            argument.get('name'),
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            argument.get('post'),
-                            style: const TextStyle(fontWeight: FontWeight.w300),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            argument.get('phd') != ''
-                                ? argument.get('phd')
-                                : '',
-                            style: const TextStyle(fontWeight: FontWeight.w300),
-                          ),
-                          const Divider(height: 24),
-                          const Text(
-                            "Mobile: ",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(height: 4),
-                          SelectableText(
-                            argument.get('mobile'),
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w300),
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            "Email: ",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(height: 4),
-                          SelectableText(
-                            argument.get('email'),
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w300),
-                          ),
-                          const Divider(height: 24),
-                          const Text(
-                            "Field of Interest: ",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            argument.get('interest'),
-                            style: const TextStyle(fontWeight: FontWeight.w300),
-                          ),
-                        ],
-                      ),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              argument.get('name'),
+                              style: const TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              argument.get('post'),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              argument.get('phd') != ''
+                                  ? argument.get('phd')
+                                  : '',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                            const Divider(height: 24),
+                            const Text(
+                              "Mobile: ",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: 4),
+                            SelectableText(
+                              argument.get('mobile'),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w300),
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
+                              "Email: ",
+                              style: TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: 4),
+                            SelectableText(
+                              argument.get('email'),
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w300),
+                            ),
+                            const Divider(height: 24),
+                            const Text(
+                              "Field of Interest: ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              argument.get('interest'),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
+                            ),
+                          ],
+                        ),
 
-                      //
-                      const SizedBox(height: 16),
+                        //
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * .1),
 
-                      //
-                      Row(
-                        children: [
-                          //publication
-                          Expanded(
-                            child: argument.get('publication') == ''
-                                ? const Text('')
-                                : MaterialButton(
-                                    onPressed: () async {
-                                      final url = argument.get('publication');
-                                      //
-                                      if (argument.get('publication') != '') {
-                                        if (await canLaunch(url)) {
-                                          await launch(url);
-                                        }
-                                      } else {
-                                        // print('no publication found');
-                                      }
-                                    },
-                                    color: Colors.black,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 13),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8)),
-                                    child: const Text(
-                                      "Publication",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
+                        //
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              //publication
+                              Expanded(
+                                child: argument.get('publication') == ''
+                                    ? const Text('')
+                                    : ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(6))),
+                                        onPressed: () async {
+                                          final url =
+                                              argument.get('publication');
+                                          //
+                                          if (argument.get('publication') !=
+                                              '') {
+                                            if (await canLaunch(url)) {
+                                              await launch(url);
+                                            }
+                                          } else {
+                                            print('no publication found');
+                                          }
+                                        },
+                                        // color: Colors.black,
+                                        // padding: const EdgeInsets.symmetric(
+                                        //     vertical: 13),
+                                        // shape: RoundedRectangleBorder(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(8)),
+                                        child: const Padding(
+                                          padding: EdgeInsets.all(13),
+                                          child: Text(
+                                            "Publication",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              // color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                              ),
+
+                              const SizedBox(width: 10),
+
+                              // mail
+                              CustomButton(
+                                type: 'mailto:',
+                                link: argument.get('email'),
+                                icon: Icons.mail,
+                                color: Colors.red,
+                                borderRadius: 8,
+                              ),
+
+                              const SizedBox(width: 8),
+
+                              //call
+                              CustomButton(
+                                type: 'tel:',
+                                link: argument.get('mobile'),
+                                icon: Icons.call,
+                                color: Colors.green,
+                                borderRadius: 8,
+                              ),
+                            ],
                           ),
-
-                          const SizedBox(width: 10),
-
-                          // mail
-                          CustomButton(
-                            type: 'mailto:',
-                            link: argument.get('email'),
-                            icon: Icons.mail,
-                            color: Colors.red,
-                            borderRadius: 8,
-                          ),
-
-                          const SizedBox(width: 8),
-
-                          //call
-                          CustomButton(
-                            type: 'tel:',
-                            link: argument.get('mobile'),
-                            icon: Icons.call,
-                            color: Colors.green,
-                            borderRadius: 8,
-                          ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

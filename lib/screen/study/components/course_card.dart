@@ -9,9 +9,10 @@ import '../study_details_screen.dart';
 
 class CourseCard extends StatelessWidget {
   const CourseCard({
+    key,
     required this.year,
     required this.courseType,
-  });
+  }) : super(key: key);
   final String year;
   final String courseType;
 
@@ -26,14 +27,14 @@ class CourseCard extends StatelessWidget {
         stream: _stream.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong'));
+            return const Center(child: Text('Something went wrong'));
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return SizedBox(
                 height: MediaQuery.of(context).size.height / 3,
                 width: MediaQuery.of(context).size.width,
-                child: Center(child: CircularProgressIndicator()));
+                child: const Center(child: CircularProgressIndicator()));
           }
 
           return snapshot.data!.size > 0
@@ -42,14 +43,14 @@ class CourseCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // title
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Headline(title: courseType),
                       //
                       buildCourseList(snapshot, year, courseType),
                     ],
                   ),
                 )
-              : Center(child: Text(''));
+              : const Center(child: Text(''));
         });
   }
 }
@@ -59,9 +60,9 @@ ListView buildCourseList(
     AsyncSnapshot<dynamic> snapshot, String year, String courseType) {
   return ListView.separated(
       shrinkWrap: true,
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-      physics: ClampingScrollPhysics(),
-      separatorBuilder: (context, index) => SizedBox(height: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      physics: const ClampingScrollPhysics(),
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
       //
       itemCount: snapshot.data!.size,
       itemBuilder: (context, index) {
@@ -78,7 +79,7 @@ ListView buildCourseList(
 
         return Card(
           elevation: 6,
-          margin: EdgeInsets.all(0),
+          margin: const EdgeInsets.all(0),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: InkWell(
             onTap: () {
@@ -132,15 +133,18 @@ ListView buildCourseList(
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Course Title',
+                              const Text('Course Title',
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.grey)),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 72),
+                              Container(
+                                constraints:
+                                    const BoxConstraints(minHeight: 48),
+                                padding: const EdgeInsets.only(right: 16),
                                 child: Text(
                                   '${course.courseTitle}',
                                   maxLines: 2,
-                                  style: TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     // letterSpacing: 0,
@@ -150,7 +154,7 @@ ListView buildCourseList(
                             ],
                           ),
 
-                          Divider(),
+                          const Divider(),
 
                           //
                           Row(
@@ -182,12 +186,12 @@ Column buildInfo(String title, value) {
     children: [
       Text(
         title,
-        style: TextStyle(fontSize: 13, color: Colors.grey),
+        style: const TextStyle(fontSize: 13, color: Colors.grey),
       ),
       // SizedBox(width: 8),
       Text(
         value,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
           // color: Colors.black87,
