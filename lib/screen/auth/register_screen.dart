@@ -262,22 +262,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         const SizedBox(height: 8),
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text('Already have an account.'),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const LoginScreen()));
-                                },
-                                child: const Text('Login now',
-                                    style: TextStyle(color: Colors.blue))),
-                          ],
-                        )
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     const Text('Already have an account.'),
+                        //     TextButton(
+                        //         onPressed: () {
+                        //           Navigator.pushReplacement(
+                        //               context,
+                        //               MaterialPageRoute(
+                        //                   builder: (context) =>
+                        //                       const LoginScreen()));
+                        //         },
+                        //         child: const Text('Login now',
+                        //             style: TextStyle(color: Colors.blue))),
+                        //   ],
+                        // )
                       ],
                     ),
                   ),
