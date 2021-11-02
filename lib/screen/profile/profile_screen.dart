@@ -11,6 +11,8 @@ import '/screen/profile/edit_profile_screen.dart';
 class ProfileScreen extends StatefulWidget {
   static const routeName = 'profile_screen';
 
+  const ProfileScreen({Key? key}) : super(key: key);
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -26,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Profile',
           style: TextStyle(
             fontSize: 20,
@@ -43,14 +45,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)),
                 color: Colors.pink[100],
-                padding: EdgeInsets.only(right: 6, left: 16),
+                padding: const EdgeInsets.only(right: 6, left: 16),
                 onPressed: () {
                   showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
                             title: Text('sign out'.toUpperCase(),
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            content: Text('Are you sure to sign out?'),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            content: const Text('Are you sure to sign out?'),
                             actions: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -71,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ((Route<dynamic> route) => false));
                                       },
                                       child: Text('Sign Out'.toUpperCase())),
-                                  SizedBox(width: 8),
+                                  const SizedBox(width: 8),
                                 ],
                               ),
                             ],
@@ -79,11 +82,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
                 child: Row(
                   children: const [
-                    Text('Sign Out'),
+                    Text(
+                      'Sign Out',
+                      style: TextStyle(color: Colors.black87),
+                    ),
                     SizedBox(width: 10),
                     Icon(
                       Icons.logout_outlined,
                       size: 21,
+                      color: Colors.black87,
                     ),
                   ],
                 )),
@@ -99,10 +106,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               stream: userRef.snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Something went wrong'));
+                  return const Center(child: Text('Something went wrong'));
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 var batch = snapshot.data!.get('batch').toString();
@@ -113,11 +120,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   stream: studentRef.collection(batch).doc(id).snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return Center(child: Text('Something went wrong'));
+                      return const Center(child: Text('Something went wrong'));
                     }
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     //
@@ -128,14 +135,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           // header
                           Container(
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 //image
                                 CachedNetworkImage(
                                   imageUrl: snapshot.data!.get('imageUrl'),
-                                  fadeInDuration: Duration(milliseconds: 500),
+                                  fadeInDuration:
+                                      const Duration(milliseconds: 500),
                                   imageBuilder: (context, imageProvider) =>
                                       CircleAvatar(
                                     backgroundImage: imageProvider,
@@ -143,47 +151,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>
-                                          CircleAvatar(
+                                          const CircleAvatar(
                                     radius: 100,
                                     backgroundImage: AssetImage(
                                         'assets/images/pp_placeholder.png'),
                                     child: CupertinoActivityIndicator(),
                                   ),
                                   errorWidget: (context, url, error) =>
-                                      CircleAvatar(
+                                      const CircleAvatar(
                                           radius: 100,
                                           backgroundImage: AssetImage(
                                               'assets/images/pp_placeholder.png')),
                                 ),
 
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
 
                                 //name
                                 Text(
                                   snapshot.data!.get('name'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold),
                                 ),
 
-                                SizedBox(height: 2),
+                                const SizedBox(height: 2),
 
                                 //id
                                 Text(
                                   'ID: ' + snapshot.data!.get('id'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
 
                                 // session and batch
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     //batch
                                     Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 8, horizontal: 16),
                                       decoration: BoxDecoration(
                                         color: Colors.orange[100],
@@ -191,17 +199,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                       child: Text(
                                         snapshot.data!.get('batch'),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
 
                                     // session
                                     Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 8, horizontal: 16),
                                       decoration: BoxDecoration(
                                         color: Colors.greenAccent[100],
@@ -210,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: Text(
                                         '${int.parse(snapshot.data!.get('id').toString().substring(0, 2)) - 1}'
                                         ' - ${snapshot.data!.get('id').toString().substring(0, 2)}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.black,
                                         ),
@@ -222,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
 
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
 
                           //information section
                           Row(
@@ -234,7 +242,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: 20,
                                     color: Colors.grey,
                                   ),
-                                  SizedBox(height: 56),
+                                  const SizedBox(height: 56),
                                   Container(
                                     height: 8,
                                     width: 20,
@@ -247,11 +255,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Expanded(
                                 child: Card(
                                   elevation: 4,
-                                  margin: EdgeInsets.only(right: 16),
+                                  margin: const EdgeInsets.only(right: 16),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(8)),
                                   child: Container(
-                                    padding: EdgeInsets.fromLTRB(0, 24, 16, 24),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0, 24, 16, 24),
                                     child: Row(
                                       children: [
                                         // information
@@ -259,24 +268,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           quarterTurns: -45,
                                           child: Container(
                                             color: Colors.grey.shade300,
-                                            padding: EdgeInsets.all(8),
+                                            padding: const EdgeInsets.all(8),
                                             child: Text(
                                               'Information'.toUpperCase(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 18,
                                                   color: Colors.black),
                                             ),
                                           ),
                                         ),
 
-                                        SizedBox(width: 8),
+                                        const SizedBox(width: 8),
 
                                         // mobile, email, hall
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
+                                            const Text(
                                               'Mobile No',
                                               style: TextStyle(
                                                 color: Colors.grey,
@@ -285,13 +294,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             Text(
                                               snapshot.data!.get('mobile'),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 17,
                                               ),
                                             ),
-                                            SizedBox(height: 16),
-                                            Text(
+                                            const SizedBox(height: 16),
+                                            const Text(
                                               'Email Address',
                                               style: TextStyle(
                                                 color: Colors.grey,
@@ -302,15 +311,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               FirebaseAuth
                                                   .instance.currentUser!.email
                                                   .toString(),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 17,
                                               ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
-                                            SizedBox(height: 16),
-                                            Text(
+                                            const SizedBox(height: 16),
+                                            const Text(
                                               'Hall Name',
                                               style: TextStyle(
                                                 color: Colors.grey,
@@ -319,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             Text(
                                               snapshot.data!.get('hall'),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 17,
                                               ),
@@ -336,10 +345,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
 
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Container(
                             alignment: Alignment.centerRight,
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16),
                             child: FloatingActionButton.extended(
                               onPressed: () {
                                 Navigator.push(
@@ -350,8 +359,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             id: id,
                                             snapshot: snapshot.data!)));
                               },
-                              label: Text('Edit Profile'),
-                              icon: Icon(Icons.edit),
+                              label: const Text('Edit Profile'),
+                              icon: const Icon(Icons.edit),
                             ),
                           )
                         ],

@@ -128,6 +128,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
           : null,
       body: SafeArea(
         child: Container(
+          height: double.infinity,
           padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,

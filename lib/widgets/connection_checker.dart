@@ -1,35 +1,18 @@
 import 'dart:async';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'components/course_category_card.dart';
-import 'components/no_data_found.dart';
-
-class StudyCategoryScreen extends StatefulWidget {
-  const StudyCategoryScreen({
-    key,
-    required this.courseCode,
-    required this.year,
-    required this.courseType,
-    required this.courseCategory,
-    required this.subtitle,
-  }) : super(key: key);
-
-  final String year;
-  final String courseCode;
-  final String courseType;
-  final String courseCategory;
-  final String subtitle;
+class ConnectionChecker extends StatefulWidget {
+  const ConnectionChecker({Key? key}) : super(key: key);
 
   @override
-  _StudyCategoryScreenState createState() => _StudyCategoryScreenState();
+  _ConnectionCheckerState createState() => _ConnectionCheckerState();
 }
 
-class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
+class _ConnectionCheckerState extends State<ConnectionChecker> {
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -91,46 +74,6 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(_connectionStatus.toString());
-
-    var reference = FirebaseFirestore.instance
-        .collection('Study')
-        .doc(widget.year)
-        .collection(widget.courseType)
-        .doc(widget.courseCode)
-        .collection(widget.courseCategory);
-
-    return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async => setState(() => loadCategoryScreen(reference)),
-        child: loadCategoryScreen(reference),
-      ),
-    );
-  }
-
-  //
-  Widget loadCategoryScreen(
-      CollectionReference<Map<String, dynamic>> reference) {
-    return SizedBox(
-      height: double.infinity,
-      child: StreamBuilder<QuerySnapshot>(
-        stream: reference.orderBy('title').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
-          }
-
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          // Course Category Card
-          return snapshot.data!.size > 0
-              ? CourseCategoryCard(
-                  subtitle: widget.subtitle, snapshot: snapshot, ref: reference)
-              : const NoDataFound();
-        },
-      ),
-    );
+    return Container();
   }
 }

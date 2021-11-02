@@ -3,16 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
 class PdfViewScreen extends StatefulWidget {
-  const PdfViewScreen({required this.fileUrl, required this.title});
   final String fileUrl;
   final String title;
+
+  const PdfViewScreen({Key? key, required this.fileUrl, required this.title})
+      : super(key: key);
 
   @override
   _PdfViewScreenState createState() => _PdfViewScreenState();
 }
 
 class _PdfViewScreenState extends State<PdfViewScreen> {
-
   @override
   Widget build(BuildContext context) {
     var brightness = Theme.of(context).brightness;
@@ -35,9 +36,9 @@ Widget pdfView(String fileUrl, bool darkMode) {
   return PDF(
     enableSwipe: true,
     autoSpacing: false,
+    fitEachPage: false,
     pageFling: false,
-    nightMode: darkMode? true : false,
-    fitEachPage: true,
+    nightMode: darkMode ? true : false,
     // fitPolicy: FitPolicy.BOTH,
   ).cachedFromUrl(
     fileUrl,
@@ -48,19 +49,20 @@ Widget pdfView(String fileUrl, bool darkMode) {
           Stack(
             alignment: Alignment.center,
             children: [
-              CircularProgressIndicator(),
+              const CircularProgressIndicator(),
               Text(progress.toStringAsFixed(0)),
             ],
           ),
-          SizedBox(width: 12),
-          Text('Loading ...'),
+          const SizedBox(width: 12),
+          const Text('Loading ...'),
         ],
       ),
     ),
-    errorWidget: (dynamic error) => Center(
-        child: Text(
-      'Fail to load file. Try again or\nCheck your internet connection',
-      textAlign: TextAlign.center,
-    ),),
+    errorWidget: (dynamic error) => const Center(
+      child: Text(
+        'Check your internet connection\nor\nTry again',
+        textAlign: TextAlign.center,
+      ),
+    ),
   );
 }

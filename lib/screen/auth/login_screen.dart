@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             suffixIcon: GestureDetector(
                                 onTap: () =>
                                     setState(() => _isObscure = !_isObscure),
-                                child: _isObscure == true
+                                child: _isObscure
                                     ? const Icon(Icons.visibility)
                                     : const Icon(
                                         Icons.visibility_off_outlined)),
@@ -165,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() => loading = false);
         Fluttertoast.showToast(msg: 'Login Successful');
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => DashboardScreen()));
+            MaterialPageRoute(builder: (context) => const DashboardScreen()));
       } else {
         setState(() => loading = false);
         print('No user found');

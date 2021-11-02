@@ -45,7 +45,11 @@ class _StudyScreenState extends State<StudyScreen> {
               child: ButtonTheme(
                 alignedDropdown: true,
                 child: DropdownButton(
-                  hint: Text(yearHint),
+                  iconEnabledColor: Colors.black87,
+                  hint: Text(
+                    yearHint,
+                    style: const TextStyle(color: Colors.black87),
+                  ),
                   value: selectedYear,
                   items: kYearList
                       .map(

@@ -12,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import '/firebase/firebase_api.dart';
 import '/screen/dashboard/dashboard_screen.dart';
 import '/widgets/loading.dart';
-import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = 'register_screen';
@@ -147,27 +146,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Stack(
                             alignment: Alignment.bottomRight,
                             children: [
-                              Container(
-                                height: 170,
-                                width: 170,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
+                              GestureDetector(
+                                onTap: () => pickImage(),
+                                child: Container(
+                                  height: 170,
+                                  width: 170,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  child: _imageFile == null
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Image.asset(
+                                              'assets/images/pp_placeholder.png',
+                                              fit: BoxFit.cover))
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Image.file(
+                                            _imageFile!,
+                                            fit: BoxFit.cover,
+                                          )),
                                 ),
-                                child: _imageFile == null
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Image.asset(
-                                            'assets/images/pp_placeholder.png',
-                                            fit: BoxFit.cover))
-                                    : ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Image.file(
-                                          _imageFile!,
-                                          fit: BoxFit.cover,
-                                        )),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(right: 16),
@@ -261,23 +263,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
 
                         const SizedBox(height: 8),
-
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     const Text('Already have an account.'),
-                        //     TextButton(
-                        //         onPressed: () {
-                        //           Navigator.pushReplacement(
-                        //               context,
-                        //               MaterialPageRoute(
-                        //                   builder: (context) =>
-                        //                       const LoginScreen()));
-                        //         },
-                        //         child: const Text('Login now',
-                        //             style: TextStyle(color: Colors.blue))),
-                        //   ],
-                        // )
                       ],
                     ),
                   ),

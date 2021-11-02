@@ -1,10 +1,16 @@
+import 'dart:async';
+
+import 'package:app_settings/app_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/services.dart';
 
-import '/screen/study/study_category_screen_notes.dart';
+import '../study/components/no_data_found.dart';
+import '../study/study_category_screen_notes.dart';
 
-class NotesScreen extends StatelessWidget {
+class NotesScreen extends StatefulWidget {
   const NotesScreen({
     key,
     required this.year,
@@ -21,12 +27,76 @@ class NotesScreen extends StatelessWidget {
   final String subtitle;
 
   @override
+  State<NotesScreen> createState() => _NotesScreenState();
+}
+
+class _NotesScreenState extends State<NotesScreen> {
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+      return;
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectionStatus = result;
+      if (_connectionStatus == ConnectivityResult.none) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('No Internet Connection'),
+          action: SnackBarAction(
+            onPressed: () async {
+              await AppSettings.openWIFISettings();
+            },
+            label: 'Connect',
+          ),
+        ));
+      } else {
+        print('network status: $_connectionStatus');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     var reference = FirebaseFirestore.instance
         .collection('Study')
-        .doc(year)
-        .collection(courseType)
-        .doc(courseCode)
+        .doc(widget.year)
+        .collection(widget.courseType)
+        .doc(widget.courseCode)
         .collection('Lessons');
 
     return Scaffold(
@@ -38,7 +108,7 @@ class NotesScreen extends StatelessWidget {
             }
 
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: const CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             return snapshot.data!.size > 0
@@ -55,9 +125,9 @@ class NotesScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => StudyCategoryScreenNotes(
-                                year: year,
-                                courseType: courseType,
-                                courseCode: courseCode,
+                                year: widget.year,
+                                courseType: widget.courseType,
+                                courseCode: widget.courseCode,
                                 courseCategory: 'Notes',
                                 subtitle: 'Creator',
                                 chapterNo: document.id.toString(),
@@ -97,7 +167,7 @@ class NotesScreen extends StatelessWidget {
                       );
                     }).toList(),
                   )
-                : Center(child: const Text('No Data found'));
+                : const NoDataFound();
           }),
     );
   }

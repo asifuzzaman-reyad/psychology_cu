@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 import '../screen/auth/login_screen.dart';
 import '../screen/auth/register_info_screen.dart';
@@ -25,6 +26,7 @@ void main() async {
   // initialize firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FlutterDownloader.initialize(debug: true);
 
   // force to stick portrait screen
   SystemChrome.setPreferredOrientations([
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
       routes: {
         //
         SplashScreen.routeName: (context) => const SplashScreen(),
-        DashboardScreen.routeName: (context) => DashboardScreen(),
+        DashboardScreen.routeName: (context) => const DashboardScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         RegisterInfoScreen.routeName: (context) => const RegisterInfoScreen(),
         RegisterScreen.routeName: (context) => const RegisterScreen(),
@@ -65,7 +67,7 @@ class MyApp extends StatelessWidget {
         CommunityScreen.routeName: (context) => const CommunityScreen(),
 
         //
-        StudyScreen.routeName: (context) => StudyScreen(),
+        StudyScreen.routeName: (context) => const StudyScreen(),
       },
     );
   }
