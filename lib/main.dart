@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,13 +40,19 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Psy Assistant',
       debugShowCheckedModeBanner: false,
       // themeMode: ThemeMode.dark,
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),
+      navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
       initialRoute: SplashScreen.routeName,
       routes: {
         //
@@ -53,7 +61,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => const LoginScreen(),
         RegisterInfoScreen.routeName: (context) => const RegisterInfoScreen(),
         RegisterScreen.routeName: (context) => const RegisterScreen(),
-        ProfileScreen.routeName: (context) => ProfileScreen(),
+        ProfileScreen.routeName: (context) => const ProfileScreen(),
 
         //
         HomeScreen.routeName: (context) => const HomeScreen(),

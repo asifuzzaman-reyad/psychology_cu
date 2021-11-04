@@ -12,10 +12,10 @@ class OfficeScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('CR & Office Stuff'),
+          title: const Text('CR & Office Stuff'),
           centerTitle: true,
-          bottom: TabBar(
-            tabs: const [
+          bottom: const TabBar(
+            tabs: [
               Tab(text: 'Class Representative'),
               Tab(text: 'Office Stuff'),
             ],
@@ -27,25 +27,29 @@ class OfficeScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             //cr list
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: Column(
-                  children: [
-                    CrList(year: '1st Year'),
-                    SizedBox(height: 8),
-                    CrList(year: '2nd Year'),
-                    SizedBox(height: 8),
-                    CrList(year: '3rd Year'),
-                    SizedBox(height: 8),
-                    CrList(year: '4th Year'),
-                  ],
+            Scrollbar(
+              radius: const Radius.circular(8),
+              interactive: true,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: Column(
+                    children: const [
+                      CrList(year: '1st Year'),
+                      SizedBox(height: 8),
+                      CrList(year: '2nd Year'),
+                      SizedBox(height: 8),
+                      CrList(year: '3rd Year'),
+                      SizedBox(height: 8),
+                      CrList(year: '4th Year'),
+                    ],
+                  ),
                 ),
               ),
             ),
 
             // stuff list
-            StuffList(),
+            const StuffList(),
           ],
         ),
       ),

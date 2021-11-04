@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '/models/course.dart';
-import './/screen/home/components/headline.dart';
+import '../../home/widgets/headline.dart';
 import '../study_details_screen.dart';
 
 class CourseCard extends StatelessWidget {

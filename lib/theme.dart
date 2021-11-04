@@ -15,6 +15,7 @@ ThemeData lightThemeData(BuildContext context) {
     textTheme: ThemeData.light().textTheme.apply(fontFamily: 'Lato'),
     floatingActionButtonTheme:
         FloatingActionButtonThemeData(backgroundColor: Colors.amber.shade200),
+    tabBarTheme: const TabBarTheme(labelColor: Colors.black),
   );
 }
 

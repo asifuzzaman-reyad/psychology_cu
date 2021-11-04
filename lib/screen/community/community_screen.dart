@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '/screen/home/components/headline.dart';
 import '/widgets/custom_button.dart';
+import '../home/widgets/headline.dart';
 
 class CommunityScreen extends StatelessWidget {
   static const routeName = 'community_screen';

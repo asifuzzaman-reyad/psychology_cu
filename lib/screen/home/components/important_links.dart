@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/headline.dart';
 import '../widgets/link_card.dart';
-import 'headline.dart';
 
 class ImportantLinks extends StatelessWidget {
   const ImportantLinks({Key? key}) : super(key: key);
@@ -31,6 +31,7 @@ class ImportantLinks extends StatelessWidget {
             //cu.com
             LinkCard(
               title: 'University of chittagong',
+              color: Colors.white,
               link: 'https://cu.ac.bd/',
               imageUrl: 'assets/logo/cu_logo.png',
             ),

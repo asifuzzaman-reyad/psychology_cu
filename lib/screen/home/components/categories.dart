@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '/constants.dart';
 import '/screen/community/community_screen.dart';
 import '/screen/office/office_screen.dart';
 import '/screen/student/student_screen.dart';
 import '/screen/teacher/teacher_screen.dart';
-import '../../../constants.dart';
 import '../widgets/category_card.dart';
-import 'headline.dart';
+import '../widgets/headline.dart';
 
 class Categories extends StatelessWidget {
   const Categories({Key? key}) : super(key: key);

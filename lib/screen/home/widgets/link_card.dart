@@ -10,6 +10,7 @@ class LinkCard extends StatelessWidget {
     required this.imageUrl,
     this.enableBorder,
   });
+
   final String title;
   final Color? color;
   final String link;
@@ -34,11 +35,12 @@ class LinkCard extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: enableBorder == true ? Border.all(color: Colors.grey, width: .5) : null
-        ),
+            borderRadius: BorderRadius.circular(8),
+            border: enableBorder == true
+                ? Border.all(color: Colors.grey, width: .5)
+                : null),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,15 +50,19 @@ class LinkCard extends StatelessWidget {
               width: 48,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: color ?? Colors.white,
+                color: color ?? Colors.transparent,
               ),
-              child: Image.asset(imageUrl),
+              child: Image.asset(
+                imageUrl,
+                fit: BoxFit.contain,
+              ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: enableBorder == true ? 2 : 8),
+              padding:
+                  EdgeInsets.symmetric(vertical: enableBorder == true ? 2 : 8),
               child: Text(
                 title,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

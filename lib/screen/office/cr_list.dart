@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '/screen/home/components/headline.dart';
 import '/widgets/custom_button.dart';
+import '../home/widgets/headline.dart';
 
 class CrList extends StatelessWidget {
   final String year;
