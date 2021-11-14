@@ -14,6 +14,29 @@ class PdfViewScreen extends StatefulWidget {
 }
 
 class _PdfViewScreenState extends State<PdfViewScreen> {
+  //TODO: fix lost orientation issue
+
+  // allow to change orientation
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   SystemChrome.setPreferredOrientations([
+  //     DeviceOrientation.portraitUp,
+  //
+  //     // DeviceOrientation.landscapeRight,
+  //     // DeviceOrientation.landscapeLeft,
+  //   ]);
+  // }
+
+  // dispose to return portrait mode
+  // @override
+  // dispose() {
+  //   SystemChrome.setPreferredOrientations([
+  //     DeviceOrientation.portraitUp,
+  //   ]);
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     var brightness = Theme.of(context).brightness;
@@ -36,10 +59,10 @@ Widget pdfView(String fileUrl, bool darkMode) {
   return PDF(
     enableSwipe: true,
     autoSpacing: false,
-    fitEachPage: false,
+    fitEachPage: true,
     pageFling: false,
     nightMode: darkMode ? true : false,
-    // fitPolicy: FitPolicy.BOTH,
+    fitPolicy: FitPolicy.BOTH,
   ).cachedFromUrl(
     fileUrl,
     placeholder: (double progress) => Center(

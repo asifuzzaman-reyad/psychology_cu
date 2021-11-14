@@ -4,6 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import 'package:psy_assistant/ad_mob/ad_state.dart';
+import 'package:psy_assistant/ad_mob/my_banner_ad.dart';
 
 import '/screen/auth/login_screen.dart';
 import '/screen/profile/edit_profile_screen.dart';
@@ -18,6 +22,26 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  //ad mob
+  BannerAd? banner;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      setState(() {
+        banner = BannerAd(
+          adUnitId: adState.bannerAdUnitId,
+          size: AdSize.banner,
+          request: const AdRequest(),
+          listener: adState.bannerAdListener,
+        )..load();
+      });
+    });
+  }
+
+  // firebase
   var userRef = FirebaseFirestore.instance
       .collection('Users')
       .doc(FirebaseAuth.instance.currentUser!.uid.toString());
@@ -97,6 +121,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
+
+      // profile body
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,6 +372,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
 
                           const SizedBox(height: 16),
+
+                          //edit profile button
                           Container(
                             alignment: Alignment.centerRight,
                             padding: const EdgeInsets.all(16),
@@ -362,7 +390,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               label: const Text('Edit Profile'),
                               icon: const Icon(Icons.edit),
                             ),
-                          )
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // banner ad
+                          MyBannerAd(banner: banner)
                         ],
                       ),
                     );

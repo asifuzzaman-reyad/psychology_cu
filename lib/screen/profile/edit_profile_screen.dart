@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
 import './/constants.dart';
 import './/firebase/firebase_api.dart';
 
@@ -46,7 +48,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: const Text('Edit Profile'),
         elevation: 0,
       ),
       body: Container(
@@ -199,7 +201,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   .update({
                                 'name': _nameController.text,
                                 'mobile': _mobileController.text,
-                                'hall': _selectedHall ?? widget.snapshot.get('hall'),
+                                'hall': _selectedHall ??
+                                    widget.snapshot.get('hall'),
                               }).whenComplete(() {
                                 setState(() {
                                   _isLoading = false;

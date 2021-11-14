@@ -6,6 +6,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import 'package:psy_assistant/ad_mob/ad_state.dart';
+import 'package:psy_assistant/ad_mob/my_banner_ad.dart';
 
 import '../study/components/no_data_found.dart';
 import '../study/study_category_screen_notes.dart';
@@ -31,6 +35,26 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
+  // ad mob
+  BannerAd? banner;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      setState(() {
+        banner = BannerAd(
+          adUnitId: adState.bannerAdUnitId,
+          size: AdSize.banner,
+          request: const AdRequest(),
+          listener: adState.bannerAdListener,
+        )..load();
+      });
+    });
+  }
+
+  // internet check
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -90,6 +114,7 @@ class _NotesScreenState extends State<NotesScreen> {
     });
   }
 
+  //
   @override
   Widget build(BuildContext context) {
     var reference = FirebaseFirestore.instance
@@ -100,75 +125,86 @@ class _NotesScreenState extends State<NotesScreen> {
         .collection('Lessons');
 
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-          stream: reference.snapshots(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return const Center(child: Text('Something went wrong'));
-            }
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+                stream: reference.snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(child: Text('Something went wrong'));
+                  }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-            return snapshot.data!.size > 0
-                ? ListView(
-                    padding: const EdgeInsets.all(8),
-                    children: snapshot.data!.docs.map((document) {
-                      return Card(
-                        elevation: 4,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        margin: const EdgeInsets.all(8),
-                        child: ListTile(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StudyCategoryScreenNotes(
-                                year: widget.year,
-                                courseType: widget.courseType,
-                                courseCode: widget.courseCode,
-                                courseCategory: 'Notes',
-                                subtitle: 'Creator',
-                                chapterNo: document.id.toString(),
-                                chapterTitle: document.get('title').toString(),
+                  return snapshot.data!.size > 0
+                      ? ListView(
+                          padding: const EdgeInsets.all(8),
+                          children: snapshot.data!.docs.map((document) {
+                            return Card(
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              margin: const EdgeInsets.all(8),
+                              child: ListTile(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        StudyCategoryScreenNotes(
+                                      year: widget.year,
+                                      courseType: widget.courseType,
+                                      courseCode: widget.courseCode,
+                                      courseCategory: 'Notes',
+                                      subtitle: 'Creator',
+                                      chapterNo: document.id.toString(),
+                                      chapterTitle:
+                                          document.get('title').toString(),
+                                    ),
+                                  ),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                contentPadding: const EdgeInsets.all(12),
+                                leading: Container(
+                                  height: 56,
+                                  width: 56,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.amber.shade200,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(document.id,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 32,
+                                      )),
+                                ),
+                                title: Text(
+                                  '${document.get('title')}',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          contentPadding: const EdgeInsets.all(12),
-                          leading: Container(
-                            height: 56,
-                            width: 56,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Colors.amber.shade200,
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(document.id,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 32,
-                                )),
-                          ),
-                          title: Text(
-                            '${document.get('title')}',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  )
-                : const NoDataFound();
-          }),
+                            );
+                          }).toList(),
+                        )
+                      : const NoDataFound();
+                }),
+          ),
+
+          // banner
+          MyBannerAd(banner: banner)
+        ],
+      ),
     );
   }
 }

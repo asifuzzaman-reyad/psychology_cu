@@ -4,12 +4,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class LinkCard extends StatelessWidget {
   const LinkCard({
+    Key? key,
     required this.title,
     this.color,
     required this.link,
     required this.imageUrl,
     this.enableBorder,
-  });
+  }) : super(key: key);
 
   final String title;
   final Color? color;

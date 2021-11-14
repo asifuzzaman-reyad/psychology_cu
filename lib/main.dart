@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import 'package:psy_assistant/ad_mob/ad_state.dart';
 
 import '../screen/auth/login_screen.dart';
 import '../screen/auth/register_info_screen.dart';
@@ -21,20 +24,34 @@ import 'splash_screen.dart';
 import 'theme.dart';
 
 void main() async {
+  // initialize firebase
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // ad mob init
+  final initFuture = MobileAds.instance.initialize();
+  final adState = AdState(initFuture);
+
+  //firebase app init
+  await Firebase.initializeApp();
+
+  // downloader init
+  await FlutterDownloader.initialize(debug: true);
+
   //status bar transparent
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
-  // initialize firebase
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await FlutterDownloader.initialize(debug: true);
-
   // force to stick portrait screen
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]).then((value) => runApp(const MyApp()));
+    // DeviceOrientation.portraitDown,
+  ]).then(
+    // (value) => runApp(const MyApp()),
+    (value) => runApp(Provider.value(
+      value: adState,
+      builder: (context, child) => const MyApp(),
+    )),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -61,21 +78,23 @@ class MyApp extends StatelessWidget {
         LoginScreen.routeName: (context) => const LoginScreen(),
         RegisterInfoScreen.routeName: (context) => const RegisterInfoScreen(),
         RegisterScreen.routeName: (context) => const RegisterScreen(),
-        ProfileScreen.routeName: (context) => const ProfileScreen(),
 
-        //
+        // home
         HomeScreen.routeName: (context) => const HomeScreen(),
 
         TeacherScreen.routeName: (context) => TeacherScreen(),
         TeacherDetailsScreen.routeName: (context) =>
             const TeacherDetailsScreen(),
 
-        StudentScreen.routeName: (context) => StudentScreen(),
+        StudentScreen.routeName: (context) => const StudentScreen(),
         OfficeScreen.routeName: (context) => OfficeScreen(),
         CommunityScreen.routeName: (context) => const CommunityScreen(),
 
-        //
+        // study
         StudyScreen.routeName: (context) => const StudyScreen(),
+
+        //profile
+        ProfileScreen.routeName: (context) => const ProfileScreen(),
       },
     );
   }

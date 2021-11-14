@@ -21,6 +21,7 @@ dependencies:
   cloud_firestore: ^2.4.0
   firebase_storage: ^10.0.1
   firebase_analytics: ^8.3.4
+  google_mobile_ads: ^0.13.6
 
   fluttertoast: ^8.0.8
   flutter_spinkit: ^5.0.0
@@ -39,6 +40,8 @@ dependencies:
   flutter_downloader: ^1.4.4
   connectivity_plus: ^2.0.2
   app_settings: ^4.1.1
+
+  provider: ^6.0.1
 
   permission_handler:
 

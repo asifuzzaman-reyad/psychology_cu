@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../home/widgets/headline.dart';
-import '../home/widgets/link_card.dart';
+import '../widgets/headline.dart';
+import '../widgets/link_card.dart';
 
 class DriveCollections extends StatelessWidget {
   const DriveCollections({Key? key}) : super(key: key);

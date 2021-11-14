@@ -30,6 +30,7 @@ class StudyCategoryScreen extends StatefulWidget {
 }
 
 class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
+  // internet check
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -111,26 +112,32 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
   //
   Widget loadCategoryScreen(
       CollectionReference<Map<String, dynamic>> reference) {
-    return SizedBox(
-      height: double.infinity,
-      child: StreamBuilder<QuerySnapshot>(
-        stream: reference.orderBy('title').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
-          }
+    return Column(
+      children: [
+        Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: reference.orderBy('title').snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return const Center(child: Text('Something went wrong'));
+              }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          // Course Category Card
-          return snapshot.data!.size > 0
-              ? CourseCategoryCard(
-                  subtitle: widget.subtitle, snapshot: snapshot, ref: reference)
-              : const NoDataFound();
-        },
-      ),
+              // Course Category Card
+              return snapshot.data!.size > 0
+                  ? CourseCategoryCard(
+                      subtitle: widget.subtitle,
+                      snapshot: snapshot,
+                      ref: reference)
+                  : const NoDataFound();
+            },
+          ),
+        ),
+      ],
     );
   }
 }

@@ -20,7 +20,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   int _currentIndex = 0;
-  final List _pages = [const HomeScreen(), StudyScreen(), ProfileScreen()];
+  final List _pages = [
+    const HomeScreen(),
+    const StudyScreen(),
+    const ProfileScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
