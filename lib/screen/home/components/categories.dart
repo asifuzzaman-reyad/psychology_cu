@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '/constants.dart';
-import '/screen/community/community_screen.dart';
+import '/screen/about/about_screen.dart';
 import '/screen/office/office_screen.dart';
 import '/screen/student/student_screen.dart';
 import '/screen/teacher/teacher_screen.dart';
@@ -34,7 +34,7 @@ class Categories extends StatelessWidget {
             CategoryCard(
               title: 'About\nDepartment',
               color: kCardColor1,
-              routeName: CommunityScreen.routeName,
+              routeName: AboutScreen.routeName,
             ),
             CategoryCard(
               title: 'Teacher\nInformation',

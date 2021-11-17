@@ -8,11 +8,9 @@ import '../../home/widgets/headline.dart';
 import '../study_details_screen.dart';
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({
-    key,
-    required this.year,
-    required this.courseType,
-  }) : super(key: key);
+  const CourseCard({key, required this.year, required this.courseType})
+      : super(key: key);
+
   final String year;
   final String courseType;
 
@@ -44,9 +42,11 @@ class CourseCard extends StatelessWidget {
                     children: [
                       // title
                       const SizedBox(height: 8),
+
                       Headline(title: courseType),
+
                       //
-                      buildCourseList(snapshot, year, courseType),
+                      courseList(snapshot, year, courseType),
                     ],
                   ),
                 )
@@ -56,8 +56,8 @@ class CourseCard extends StatelessWidget {
 }
 
 //
-ListView buildCourseList(
-    AsyncSnapshot<dynamic> snapshot, String year, String courseType) {
+ListView courseList(
+    AsyncSnapshot<QuerySnapshot> snapshot, String year, String courseType) {
   return ListView.separated(
       shrinkWrap: true,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
@@ -82,6 +82,7 @@ ListView buildCourseList(
           margin: const EdgeInsets.all(0),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: InkWell(
+            borderRadius: BorderRadius.circular(8),
             onTap: () {
               Navigator.push(
                   context,

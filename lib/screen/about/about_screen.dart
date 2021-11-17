@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '/widgets/custom_button.dart';
 import '../home/widgets/headline.dart';
 
-class CommunityScreen extends StatelessWidget {
+class AboutScreen extends StatelessWidget {
   static const routeName = 'community_screen';
 
-  const CommunityScreen({Key? key}) : super(key: key);
+  const AboutScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,7 @@ class CommunityScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                        'Furthermore, the Departmental teaching, research, and field training are centered around contemporary issues as stress and health, ageing, community mental health, parenting style, neuropsychological assessment and cross-cultural psychology, etc. A large number of our Master’s students after completing their degrees are employed by different organizations/ hospitals dealing with these issues. From time to time, the Department organizes seminars, refresher course, training, workshops, etc. for the benefit of faculty and students. In addition, many research projects have also been undertaken.',
+                        'Furthermore, the Departmental teaching, research, and field training are centered around contemporary issues as stress and health, ageing, about mental health, parenting style, neuropsychological assessment and cross-cultural psychology, etc. A large number of our Master’s students after completing their degrees are employed by different organizations/ hospitals dealing with these issues. From time to time, the Department organizes seminars, refresher course, training, workshops, etc. for the benefit of faculty and students. In addition, many research projects have also been undertaken.',
                         style: Theme.of(context).textTheme.bodyText2),
                   ],
                 ),

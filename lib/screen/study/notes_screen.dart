@@ -6,10 +6,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
-import 'package:psy_assistant/ad_mob/ad_state.dart';
-import 'package:psy_assistant/ad_mob/my_banner_ad.dart';
 
 import '../study/components/no_data_found.dart';
 import '../study/study_category_screen_notes.dart';
@@ -35,26 +31,6 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  // ad mob
-  BannerAd? banner;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final adState = Provider.of<AdState>(context);
-    adState.initialization.then((status) {
-      setState(() {
-        banner = BannerAd(
-          adUnitId: adState.bannerAdUnitId,
-          size: AdSize.banner,
-          request: const AdRequest(),
-          listener: adState.bannerAdListener,
-        )..load();
-      });
-    });
-  }
-
-  // internet check
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -200,9 +176,6 @@ class _NotesScreenState extends State<NotesScreen> {
                       : const NoDataFound();
                 }),
           ),
-
-          // banner
-          MyBannerAd(banner: banner)
         ],
       ),
     );

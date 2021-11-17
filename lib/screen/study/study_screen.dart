@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
-import 'package:psy_assistant/ad_mob/ad_state.dart';
-import 'package:psy_assistant/ad_mob/my_banner_ad.dart';
 
 import '/constants.dart';
 import 'components/course_card.dart';
@@ -19,25 +15,6 @@ class StudyScreen extends StatefulWidget {
 }
 
 class _StudyScreenState extends State<StudyScreen> {
-  //ad mov
-  BannerAd? banner;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final adState = Provider.of<AdState>(context);
-    adState.initialization.then((status) {
-      setState(() {
-        banner = BannerAd(
-          adUnitId: adState.bannerAdUnitId,
-          size: AdSize.banner,
-          request: const AdRequest(),
-          listener: adState.bannerAdListener,
-        )..load();
-      });
-    });
-  }
-
   String batch = '';
   String year = '';
 
@@ -68,17 +45,11 @@ class _StudyScreenState extends State<StudyScreen> {
               child: ButtonTheme(
                 alignedDropdown: true,
                 child: DropdownButton(
-                  iconEnabledColor: Colors.black87,
-                  hint: Text(
-                    yearHint,
-                    style: const TextStyle(color: Colors.black87),
-                  ),
+                  hint: Text(yearHint),
                   value: selectedYear,
                   items: kYearList
-                      .map(
-                        (String item) =>
-                            DropdownMenuItem(child: Text(item), value: item),
-                      )
+                      .map((String item) =>
+                          DropdownMenuItem(child: Text(item), value: item))
                       .toList(),
                   onChanged: (String? value) {
                     setState(() {
@@ -123,30 +94,24 @@ class _StudyScreenState extends State<StudyScreen> {
                 return const Center(child: CircularProgressIndicator());
               }
 
+              // course category
               var year = snapshot.data!.get('year');
-              return buildCourseList(year);
+              return courseCategory(year);
             },
           );
         },
       ),
-
-      // body: buildPadding(),
     );
   }
 
-  // CourseList
-  Padding buildCourseList(year) {
+  // courseCategory
+  Widget courseCategory(year) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           //major course
           CourseCard(year: selectedYear ?? year, courseType: 'Major Course'),
-
-          MyBannerAd(
-            banner: banner,
-            enableMargin: true,
-          ),
 
           // related course
           CourseCard(year: selectedYear ?? year, courseType: 'Related Course'),

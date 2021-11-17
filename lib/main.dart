@@ -4,33 +4,25 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
-import 'package:psy_assistant/ad_mob/ad_state.dart';
 
-import '../screen/auth/login_screen.dart';
-import '../screen/auth/register_info_screen.dart';
-import '../screen/auth/register_screen.dart';
-import '../screen/community/community_screen.dart';
-import '../screen/dashboard/dashboard_screen.dart';
-import '../screen/home/home_screen.dart';
-import '../screen/office/office_screen.dart';
-import '../screen/profile/profile_screen.dart';
-import '../screen/student/student_screen.dart';
-import '../screen/study/study_screen.dart';
-import '../screen/teacher/teacher_details_screen.dart';
-import '../screen/teacher/teacher_screen.dart';
+import '/screen/about/about_screen.dart';
+import '/screen/auth/login_screen.dart';
+import '/screen/auth/register_info_screen.dart';
+import '/screen/auth/register_screen.dart';
+import '/screen/dashboard/dashboard_screen.dart';
+import '/screen/home/home_screen.dart';
+import '/screen/office/office_screen.dart';
+import '/screen/profile/profile_screen.dart';
+import '/screen/student/student_screen.dart';
+import '/screen/study/study_screen.dart';
+import '/screen/teacher/teacher_details_screen.dart';
+import '/screen/teacher/teacher_screen.dart';
 import 'splash_screen.dart';
 import 'theme.dart';
 
 void main() async {
   // initialize firebase
   WidgetsFlutterBinding.ensureInitialized();
-
-  // ad mob init
-  final initFuture = MobileAds.instance.initialize();
-  final adState = AdState(initFuture);
-
   //firebase app init
   await Firebase.initializeApp();
 
@@ -46,11 +38,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     // DeviceOrientation.portraitDown,
   ]).then(
-    // (value) => runApp(const MyApp()),
-    (value) => runApp(Provider.value(
-      value: adState,
-      builder: (context, child) => const MyApp(),
-    )),
+    (value) => runApp(const MyApp()),
   );
 }
 
@@ -88,7 +76,7 @@ class MyApp extends StatelessWidget {
 
         StudentScreen.routeName: (context) => const StudentScreen(),
         OfficeScreen.routeName: (context) => OfficeScreen(),
-        CommunityScreen.routeName: (context) => const CommunityScreen(),
+        AboutScreen.routeName: (context) => const AboutScreen(),
 
         // study
         StudyScreen.routeName: (context) => const StudyScreen(),

@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:provider/provider.dart';
 
-import '/ad_mob/ad_state.dart';
-import '/ad_mob/my_banner_ad.dart';
 import '../home/components/custom_drawer.dart';
 import '../home/components/home_appbar.dart';
 import '../home/header.dart';
@@ -23,24 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  BannerAd? banner;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final adState = Provider.of<AdState>(context);
-    adState.initialization.then((status) {
-      setState(() {
-        banner = BannerAd(
-          adUnitId: adState.bannerAdUnitId,
-          size: AdSize.banner,
-          request: const AdRequest(),
-          listener: adState.bannerAdListener,
-        )..load();
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,8 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // categories
                 const Categories(),
 
-                //banner
-                MyBannerAd(banner: banner),
+                const SizedBox(height: 24),
 
                 //important links
                 const ImportantLinks(),

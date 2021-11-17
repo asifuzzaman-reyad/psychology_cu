@@ -12,9 +12,6 @@
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">
 
-       <meta-data
-           android:name="com.google.android.gms.ads.APPLICATION_ID"
-           android:value="ca-app-pub-7506553655513676~2000992208"/>
 
        <provider
            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
