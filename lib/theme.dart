@@ -24,6 +24,6 @@ ThemeData darkThemeData(BuildContext context) {
   return ThemeData.dark().copyWith(
       colorScheme: const ColorScheme.dark(primary: Colors.white),
       textTheme: ThemeData.dark().textTheme.apply(fontFamily: 'Lato'),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Colors.amber.shade200));
+      floatingActionButtonTheme:
+          const FloatingActionButtonThemeData(backgroundColor: Colors.orange));
 }

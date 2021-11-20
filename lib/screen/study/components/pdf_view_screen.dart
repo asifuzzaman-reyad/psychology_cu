@@ -14,27 +14,18 @@ class PdfViewScreen extends StatefulWidget {
 }
 
 class _PdfViewScreenState extends State<PdfViewScreen> {
-  // TODO: fix lost orientation issue
+  // TODO: update orientation method
 
-  // // allow to change orientation
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.portraitUp,
-  //     DeviceOrientation.landscapeRight,
-  //     DeviceOrientation.landscapeLeft,
-  //   ]);
-  // }
-  //
-  // // dispose to return portrait mode
-  // @override
-  // dispose() {
-  //   SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.portraitUp,
-  //   ]);
-  //   super.dispose();
-  // }
+  // dispose to return portrait mode
+  @override
+  dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+    super.dispose();
+  }
+
+  bool _isRotate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,25 +38,47 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
         centerTitle: true,
         titleSpacing: 0,
         elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  _isRotate = !_isRotate;
+                });
+                //
+                SystemChrome.setPreferredOrientations([
+                  _isRotate
+                      ? DeviceOrientation.landscapeLeft
+                      : DeviceOrientation.portraitUp
+                ]);
+              },
+              icon: Icon(_isRotate
+                  ? Icons.rotate_90_degrees_ccw_outlined
+                  : Icons.screen_rotation_outlined)),
+          const SizedBox(
+            width: 8,
+          )
+        ],
       ),
-      body: PdfView(url: widget.fileUrl, darkMode: darkMode),
+      body: MediaQuery.of(context).orientation == Orientation.portrait
+          ? PdfViewPort(url: widget.fileUrl, darkMode: darkMode)
+          : PdfViewLand(url: widget.fileUrl, darkMode: darkMode),
     );
   }
 }
 
 // pdf viewer
-class PdfView extends StatefulWidget {
-  const PdfView({Key? key, required this.url, required this.darkMode})
+class PdfViewPort extends StatefulWidget {
+  const PdfViewPort({Key? key, required this.url, required this.darkMode})
       : super(key: key);
 
   final String url;
   final bool darkMode;
 
   @override
-  _PdfViewState createState() => _PdfViewState();
+  _PdfViewPortState createState() => _PdfViewPortState();
 }
 
-class _PdfViewState extends State<PdfView> {
+class _PdfViewPortState extends State<PdfViewPort> {
   @override
   Widget build(BuildContext context) {
     return PDF(
@@ -75,6 +88,56 @@ class _PdfViewState extends State<PdfView> {
       pageFling: false,
       nightMode: widget.darkMode ? true : false,
       fitPolicy: FitPolicy.BOTH,
+    ).cachedFromUrl(
+      widget.url,
+      placeholder: (double progress) => Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                Text(progress.toStringAsFixed(0)),
+              ],
+            ),
+            const SizedBox(width: 12),
+            const Text('Loading ...'),
+          ],
+        ),
+      ),
+      errorWidget: (dynamic error) => const Center(
+        child: Text(
+          'Check your internet connection\nor\nTry again',
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+}
+
+// pdf viewer
+class PdfViewLand extends StatefulWidget {
+  const PdfViewLand({Key? key, required this.url, required this.darkMode})
+      : super(key: key);
+
+  final String url;
+  final bool darkMode;
+
+  @override
+  _PdfViewLandState createState() => _PdfViewLandState();
+}
+
+class _PdfViewLandState extends State<PdfViewLand> {
+  @override
+  Widget build(BuildContext context) {
+    return PDF(
+      enableSwipe: true,
+      autoSpacing: false,
+      fitEachPage: true,
+      pageFling: false,
+      nightMode: widget.darkMode ? true : false,
+      fitPolicy: FitPolicy.WIDTH,
     ).cachedFromUrl(
       widget.url,
       placeholder: (double progress) => Center(

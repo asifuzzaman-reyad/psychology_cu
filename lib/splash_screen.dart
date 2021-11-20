@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:psy_assistant/screen/welcome/welcome_screen.dart';
 
 import '/constants.dart';
-import '/screen/auth/register_info_screen.dart';
 import 'screen/dashboard/dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,10 +26,12 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       const Duration(seconds: 1),
       () => Navigator.pushReplacementNamed(
-          context,
-          user != null
-              ? DashboardScreen.routeName
-              : RegisterInfoScreen.routeName),
+        context,
+        user != null
+            ? DashboardScreen.routeName
+            // : RegisterInfoScreen.routeName,
+            : WelcomeScreen.routeName,
+      ),
     );
   }
 

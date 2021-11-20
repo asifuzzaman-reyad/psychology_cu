@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:psy_assistant/screen/welcome/welcome_screen.dart';
 
 import '/screen/about/about_screen.dart';
 import '/screen/auth/login_screen.dart';
@@ -62,6 +63,8 @@ class MyApp extends StatelessWidget {
       routes: {
         //
         SplashScreen.routeName: (context) => const SplashScreen(),
+        WelcomeScreen.routeName: (context) => const WelcomeScreen(),
+
         DashboardScreen.routeName: (context) => const DashboardScreen(),
         LoginScreen.routeName: (context) => const LoginScreen(),
         RegisterInfoScreen.routeName: (context) => const RegisterInfoScreen(),

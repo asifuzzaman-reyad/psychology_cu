@@ -57,7 +57,8 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               const Text(
-                                  'Like our page and send a message with your Name, Batch and Student id. We will send code as soon as possible.'),
+                                  'Like our page and send a message with\n\nName:'
+                                  ' \nBatch: \nStudent id:\n\nWe will send code as soon as possible.'),
                               const SizedBox(height: 8),
                               OutlinedButton.icon(
                                   onPressed: () async {
@@ -122,7 +123,7 @@ class _RegisterInfoScreenState extends State<RegisterInfoScreen> {
                           ),
                         ));
               },
-              label: const Text('Need verify code'),
+              label: const Text('Need verification code'),
               icon: const Icon(Icons.help),
             )
           : null,
