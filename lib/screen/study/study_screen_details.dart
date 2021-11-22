@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '/screen/study/study_category_screen.dart';
+import '/screen/study/study_screen_list.dart';
+import 'bookmarks/study_bookmark_button.dart';
 import 'notes_screen.dart';
 
-class StudyDetailsScreen extends StatefulWidget {
-  const StudyDetailsScreen({
+class StudyScreenDetails extends StatefulWidget {
+  const StudyScreenDetails({
     key,
     required this.year,
     required this.courseType,
@@ -18,11 +19,11 @@ class StudyDetailsScreen extends StatefulWidget {
   final String courseCode;
 
   @override
-  _StudyDetailsScreenState createState() => _StudyDetailsScreenState();
+  _StudyScreenDetailsState createState() => _StudyScreenDetailsState();
 }
 
 //
-class _StudyDetailsScreenState extends State<StudyDetailsScreen> {
+class _StudyScreenDetailsState extends State<StudyScreenDetails> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -30,9 +31,17 @@ class _StudyDetailsScreenState extends State<StudyDetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('${widget.courseTitle} (${widget.courseCode})'),
-          // '${widgets.courseCode} (${widgets.courseTitle})'),
+          // title: Text('(${widget.courseCode}) ${widget.courseTitle}'),
           titleSpacing: 0,
           centerTitle: true,
+          actions: const [
+            // study bookmark
+            StudyBookmarkButton(),
+
+            SizedBox(width: 8),
+          ],
+
+          // tab
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Notes'),
@@ -53,28 +62,28 @@ class _StudyDetailsScreenState extends State<StudyDetailsScreen> {
               courseType: widget.courseType,
               courseCode: widget.courseCode,
               courseCategory: 'Notes',
-              subtitle: 'Creator',
+              subtitleType: 'Creator',
             ),
-            StudyCategoryScreen(
+            StudyScreenList(
               year: widget.year,
               courseType: widget.courseType,
               courseCode: widget.courseCode,
               courseCategory: 'Books',
-              subtitle: 'Author',
+              subtitleType: 'Author',
             ),
-            StudyCategoryScreen(
+            StudyScreenList(
               year: widget.year,
               courseType: widget.courseType,
               courseCode: widget.courseCode,
               courseCategory: 'Questions',
-              subtitle: 'Year',
+              subtitleType: 'Year',
             ),
-            StudyCategoryScreen(
+            StudyScreenList(
               year: widget.year,
               courseType: widget.courseType,
               courseCode: widget.courseCode,
               courseCategory: 'Syllabus',
-              subtitle: 'Year',
+              subtitleType: 'Year',
             ),
           ],
         ),

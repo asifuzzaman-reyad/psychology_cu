@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import '/models/course.dart';
 import '../../home/widgets/headline.dart';
-import '../study_details_screen.dart';
+import '../study_screen_details.dart';
 
 class CourseCard extends StatelessWidget {
   const CourseCard({key, required this.year, required this.courseType})
@@ -87,7 +87,7 @@ ListView courseList(
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => StudyDetailsScreen(
+                      builder: (context) => StudyScreenDetails(
                             year: year,
                             courseType: courseType,
                             courseTitle: course.courseTitle!,

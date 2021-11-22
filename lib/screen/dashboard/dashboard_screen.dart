@@ -44,7 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: Icon(Icons.person),
           ),
         ],
-        selectedItemColor: Colors.orange,
+        selectedItemColor: Colors.deepOrange,
         selectedFontSize: 14,
         unselectedFontSize: 12,
         currentIndex: _currentIndex,

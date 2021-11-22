@@ -6,17 +6,20 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'bookmarks/study_bookmark_button.dart';
 import 'components/course_category_card.dart';
 import 'components/no_data_found.dart';
 
-class StudyCategoryScreen extends StatefulWidget {
-  const StudyCategoryScreen({
+class StudyScreenListNotes extends StatefulWidget {
+  const StudyScreenListNotes({
     key,
     required this.courseCode,
     required this.year,
     required this.courseType,
     required this.courseCategory,
     required this.subtitle,
+    required this.chapterNo,
+    required this.chapterTitle,
   }) : super(key: key);
 
   final String year;
@@ -24,13 +27,15 @@ class StudyCategoryScreen extends StatefulWidget {
   final String courseType;
   final String courseCategory;
   final String subtitle;
+  final String chapterNo;
+  final String chapterTitle;
 
   @override
-  _StudyCategoryScreenState createState() => _StudyCategoryScreenState();
+  _StudyCategoryScreenStateNotes createState() =>
+      _StudyCategoryScreenStateNotes();
 }
 
-class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
-  // internet check
+class _StudyCategoryScreenStateNotes extends State<StudyScreenListNotes> {
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -60,9 +65,7 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
       return;
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
+    //
     if (!mounted) {
       return Future.value(null);
     }
@@ -79,7 +82,7 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
           content: const Text('No Internet Connection'),
           action: SnackBarAction(
             onPressed: () async {
-              await AppSettings.openWIFISettings();
+              await AppSettings.openDeviceSettings();
             },
             label: 'Connect',
           ),
@@ -90,54 +93,62 @@ class _StudyCategoryScreenState extends State<StudyCategoryScreen> {
     });
   }
 
+  //
   @override
   Widget build(BuildContext context) {
-    print(_connectionStatus.toString());
-
-    var reference = FirebaseFirestore.instance
+    //
+    CollectionReference reference = FirebaseFirestore.instance
         .collection('Study')
         .doc(widget.year)
         .collection(widget.courseType)
         .doc(widget.courseCode)
-        .collection(widget.courseCategory);
+        .collection(widget.courseCategory)
+        .doc('Lessons')
+        .collection(widget.chapterNo);
 
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async => setState(() => loadCategoryScreen(reference)),
-        child: loadCategoryScreen(reference),
+      appBar: AppBar(
+        title: Text(widget.chapterNo + '. ' + widget.chapterTitle),
+        centerTitle: true,
+        titleSpacing: 0,
+        elevation: 0,
+        actions: const [
+          // study bookmark
+          StudyBookmarkButton(),
+
+          SizedBox(width: 8),
+        ],
       ),
+      body: RefreshIndicator(
+          onRefresh: () async =>
+              setState(() => loadCategoryScreenNotes(reference)),
+          child: loadCategoryScreenNotes(reference)),
     );
   }
 
-  //
-  Widget loadCategoryScreen(
-      CollectionReference<Map<String, dynamic>> reference) {
-    return Column(
-      children: [
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: reference.orderBy('title').snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return const Center(child: Text('Something went wrong'));
-              }
+  //load category notes
+  StreamBuilder<QuerySnapshot<Object?>> loadCategoryScreenNotes(
+      CollectionReference<Object?> reference) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: reference.orderBy('title').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text('Something went wrong'));
+        }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-              // Course Category Card
-              return snapshot.data!.size > 0
-                  ? CourseCategoryCard(
-                      subtitle: widget.subtitle,
-                      snapshot: snapshot,
-                      ref: reference)
-                  : const NoDataFound();
-            },
-          ),
-        ),
-      ],
+        // Course Category Card
+        return snapshot.data!.size > 0
+            ? CourseCategoryCard(
+                subtitle: widget.subtitle,
+                snapshot: snapshot,
+                ref: reference,
+              )
+            : const NoDataFound();
+      },
     );
   }
 }

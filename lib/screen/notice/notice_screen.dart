@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 class NoticeScreen extends StatefulWidget {
+  const NoticeScreen({Key? key}) : super(key: key);
+
   @override
   _NoticeScreenState createState() => _NoticeScreenState();
 }
@@ -15,7 +17,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notice'),
+        title: const Text('Notice'),
         elevation: 0,
         centerTitle: true,
       ),
@@ -26,11 +28,11 @@ class _NoticeScreenState extends State<NoticeScreen> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Something went wrong'));
+            return const Center(child: Text('Something went wrong'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             // return Center(child: CircularProgressIndicator());
-            return Center(child: Text(''));
+            return Center(child: const Text(''));
           }
 
           String currentBatch = snapshot.data!.get('batch').toString();
@@ -44,78 +46,81 @@ class _NoticeScreenState extends State<NoticeScreen> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
-                  return Center(child: Text('Something went wrong'));
+                  return const Center(child: Text('Something went wrong'));
                 }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 var data = snapshot.data!.docs;
                 return snapshot.data!.size == 0
-                    ? Center(child: Text('No Notice found'))
+                    ? const Center(child: Text('No notice found'))
                     : ListView.separated(
                         shrinkWrap: true,
                         itemCount: data.length,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 16),
                         separatorBuilder: (context, index) =>
-                            SizedBox(height: 12),
+                            const SizedBox(height: 12),
                         itemBuilder: (BuildContext context, int index) {
 //
                           var notice = data[index];
                           return Card(
                             margin: EdgeInsets.zero,
                             elevation: 4,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-
                                 //header
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 8, 8, 0),
                                   child: Row(
                                     children: [
                                       CachedNetworkImage(
                                         imageUrl: notice.get('crImage'),
                                         fadeInDuration:
-                                        Duration(milliseconds: 500),
-                                        imageBuilder: (context, imageProvider) =>
-                                            CircleAvatar(
-                                              backgroundImage: imageProvider,
-                                              radius: 22,
-                                            ),
+                                            const Duration(milliseconds: 500),
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                CircleAvatar(
+                                          backgroundImage: imageProvider,
+                                          radius: 22,
+                                        ),
                                         progressIndicatorBuilder: (context, url,
-                                            downloadProgress) =>
-                                            CircleAvatar(
+                                                downloadProgress) =>
+                                            const CircleAvatar(
                                                 radius: 22,
-                                                child: CupertinoActivityIndicator(),
+                                                child:
+                                                    CupertinoActivityIndicator(),
                                                 backgroundImage: AssetImage(
                                                     'assets/images/pp_placeholder.png')),
                                         errorWidget: (context, url, error) =>
                                             Icon(Icons.error),
                                       ),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(notice.get('crName'),
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   // color: Colors.black87,
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600)),
-                                          SizedBox(height: 2),
+                                          const SizedBox(height: 2),
                                           Row(
                                             children: [
-                                              Icon(Icons.schedule,
+                                              const Icon(Icons.schedule,
                                                   // color: Colors.black45,
                                                   size: 16),
-                                              SizedBox(width: 3),
+                                              const SizedBox(width: 3),
                                               Text(notice.get('time'),
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontSize: 14,
                                                       // color: Colors.black54,
                                                       fontWeight:
@@ -130,7 +135,8 @@ class _NoticeScreenState extends State<NoticeScreen> {
 
                                 //message
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(12,8, 12, 12),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(12, 8, 12, 12),
                                   child: Text(notice.get('message')),
                                 ),
                               ],

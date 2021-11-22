@@ -106,16 +106,21 @@ class _StudyScreenState extends State<StudyScreen> {
 
   // courseCategory
   Widget courseCategory(year) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: SingleChildScrollView(
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          //major course
-          CourseCard(year: selectedYear ?? year, courseType: 'Major Course'),
+    return Scrollbar(
+      interactive: true,
+      radius: const Radius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: SingleChildScrollView(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            //major course
+            CourseCard(year: selectedYear ?? year, courseType: 'Major Course'),
 
-          // related course
-          CourseCard(year: selectedYear ?? year, courseType: 'Related Course'),
-        ]),
+            // related course
+            CourseCard(
+                year: selectedYear ?? year, courseType: 'Related Course'),
+          ]),
+        ),
       ),
     );
   }

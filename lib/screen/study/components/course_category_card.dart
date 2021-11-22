@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -62,129 +63,164 @@ class _CourseCategoryCardState extends State<CourseCategoryCard> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-        //
-        itemCount: widget.snapshot.data!.size,
-        itemBuilder: (context, index) {
+    return SizedBox(
+      height: double.infinity,
+      child: ListView.separated(
+          shrinkWrap: true,
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
           //
-          var document = widget.snapshot.data!.docs[index];
-          Courses courses = Courses(
-              title: document.get('title'),
-              subtitle: document.get('subtitle'),
-              date: document.get('date'),
-              fileUrl: document.get('fileUrl'));
+          itemCount: widget.snapshot.data!.size,
+          itemBuilder: (context, index) {
+            //
+            var document = widget.snapshot.data!.docs[index];
+            Courses courses = Courses(
+                title: document.get('title'),
+                subtitle: document.get('subtitle'),
+                date: document.get('date'),
+                fileUrl: document.get('fileUrl'));
 
-          return Card(
-            elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            margin: EdgeInsets.zero,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+            return Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              margin: EdgeInsets.zero,
+              child: Stack(
+                alignment: Alignment.topRight,
                 children: [
-                  const Text(
-                    'Title',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Flexible(
-                    child: Text(
-                      courses.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    widget.subtitle,
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                  Flexible(
-                    child: Text(
-                      courses.subtitle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                  //bookmark icon
+                  Tooltip(
+                    message: 'Bookmark',
+                    child: InkWell(
+                        borderRadius: BorderRadius.circular(32),
+                        onTap: () async {
+                          var userId = FirebaseAuth.instance.currentUser!.uid;
+                          FirebaseFirestore.instance
+                              .collection("Study_Temp")
+                              .doc("2nd Year")
+                              .collection(userId)
+                              .doc(document.id)
+                              .set({
+                            'title': courses.title,
+                            'fileUrl': courses.fileUrl,
+                          }).whenComplete(() {
+                            //
+                            Fluttertoast.cancel();
+                            Fluttertoast.showToast(msg: 'Add to bookmark');
+                          });
+                        },
+                        child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: const Icon(Icons.bookmarks))),
                   ),
 
-                  const SizedBox(height: 8),
                   //
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Title',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        Flexible(
+                          child: Text(
+                            courses.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.subtitle,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        Flexible(
+                          child: Text(
+                            courses.subtitle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+                        //
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
 // time
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Upload Date',
-                              style: TextStyle(fontSize: 11)),
-                          Text(courses.date,
-                              style: const TextStyle(fontSize: 13)),
-                          const SizedBox(height: 8)
-                        ],
-                      ),
-
-                      // buttons
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // download button
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32)),
-                            onPressed: () async {
-                              fileDownload(document);
-                            },
-                            child: const Text(
-                              'Download',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 14),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Upload Date',
+                                    style: TextStyle(fontSize: 11)),
+                                Text(courses.date,
+                                    style: const TextStyle(fontSize: 13)),
+                                const SizedBox(height: 8)
+                              ],
                             ),
-                            color: Colors.amberAccent,
-                          ),
 
-                          const SizedBox(width: 8),
-                          // read button
-                          MaterialButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(32)),
-                            onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PdfViewScreen(
-                                      fileUrl: courses.fileUrl,
-                                      title: courses.title),
-                                )),
-                            child: const Text(
-                              'Read',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                            color: Colors.green,
-                          ),
-                        ],
-                      )
-                    ],
-                  )
+                            // buttons
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                // download button
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(32)),
+                                  onPressed: () async {
+                                    fileDownload(document);
+                                  },
+                                  child: const Text(
+                                    'Download',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 14),
+                                  ),
+                                  color: Colors.amberAccent,
+                                ),
+
+                                const SizedBox(width: 8),
+                                // read button
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(32)),
+                                  onPressed: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => PdfViewScreen(
+                                            fileUrl: courses.fileUrl,
+                                            title: courses.title),
+                                      )),
+                                  child: const Text(
+                                    'Read',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  ),
+                                  color: Colors.green,
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-          );
-        });
+            );
+          }),
+    );
   }
 
   // file download to folder

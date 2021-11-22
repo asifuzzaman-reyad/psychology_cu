@@ -24,7 +24,8 @@ class Header extends StatelessWidget {
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // return Center(child: CircularProgressIndicator());
-                return const Center(child: Text(''));
+                return const SizedBox(
+                    height: 32, child: Center(child: Text('')));
               }
 
               var batch = snapshot.data!.get('batch').toString();
@@ -41,28 +42,35 @@ class Header extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // return Center(child: CircularProgressIndicator());
                     return const Center(
-                      child: Text(
-                        '',
-                        style: TextStyle(fontSize: 24),
+                      child: SizedBox(
+                        height: 32,
+                        child: Text(
+                          '',
+                          style: TextStyle(fontSize: 24),
+                        ),
                       ),
                     );
                   }
 
                   //
-                  return Text(
-                    snapshot.data!.get('name').toString().toUpperCase(),
-                    // 'Explore your life'.toUpperCase(),
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+                  return SizedBox(
+                    height: 32,
+                    child: Text(
+                      snapshot.data!.get('name').toString().toUpperCase(),
+                      // 'Explore your life'.toUpperCase(),
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    overflow: TextOverflow.ellipsis,
                   );
                 },
               );
             },
           ),
-          const SizedBox(height: 4),
+          // const SizedBox(height: 4),
+
           const Text(
             'Welcome to psychology family',
             style: TextStyle(

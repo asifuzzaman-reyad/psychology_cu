@@ -9,32 +9,28 @@ import 'package:flutter/services.dart';
 import 'components/course_category_card.dart';
 import 'components/no_data_found.dart';
 
-class StudyCategoryScreenNotes extends StatefulWidget {
-  const StudyCategoryScreenNotes({
+class StudyScreenList extends StatefulWidget {
+  const StudyScreenList({
     key,
     required this.courseCode,
     required this.year,
     required this.courseType,
     required this.courseCategory,
-    required this.subtitle,
-    required this.chapterNo,
-    required this.chapterTitle,
+    required this.subtitleType,
   }) : super(key: key);
 
   final String year;
   final String courseCode;
   final String courseType;
   final String courseCategory;
-  final String subtitle;
-  final String chapterNo;
-  final String chapterTitle;
+  final String subtitleType;
 
   @override
-  _StudyCategoryScreenStateNotes createState() =>
-      _StudyCategoryScreenStateNotes();
+  _StudyScreenListState createState() => _StudyScreenListState();
 }
 
-class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
+class _StudyScreenListState extends State<StudyScreenList> {
+  // internet check
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -64,9 +60,7 @@ class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
       return;
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
+    //
     if (!mounted) {
       return Future.value(null);
     }
@@ -83,7 +77,7 @@ class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
           content: const Text('No Internet Connection'),
           action: SnackBarAction(
             onPressed: () async {
-              await AppSettings.openWIFISettings();
+              await AppSettings.openDeviceSettings();
             },
             label: 'Connect',
           ),
@@ -94,46 +88,45 @@ class _StudyCategoryScreenStateNotes extends State<StudyCategoryScreenNotes> {
     });
   }
 
-  //
   @override
   Widget build(BuildContext context) {
-    CollectionReference reference = FirebaseFirestore.instance
+    var reference = FirebaseFirestore.instance
         .collection('Study')
         .doc(widget.year)
         .collection(widget.courseType)
         .doc(widget.courseCode)
-        .collection(widget.courseCategory)
-        .doc('Lessons')
-        .collection(widget.chapterNo);
+        .collection(widget.courseCategory);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.chapterNo + '. ' + widget.chapterTitle),
-        centerTitle: true,
-        titleSpacing: 0,
-        elevation: 0,
+      body: RefreshIndicator(
+        onRefresh: () async => setState(() => loadCategoryScreen(reference)),
+        child: loadCategoryScreen(reference),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: reference.orderBy('title').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('Something went wrong'));
-          }
+    );
+  }
 
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+  //
+  Widget loadCategoryScreen(
+      CollectionReference<Map<String, dynamic>> reference) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: reference.orderBy('title').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text('Something went wrong'));
+        }
 
-          // Course Category Card
-          return snapshot.data!.size > 0
-              ? CourseCategoryCard(
-                  subtitle: widget.subtitle,
-                  snapshot: snapshot,
-                  ref: reference,
-                )
-              : const NoDataFound();
-        },
-      ),
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        // Course Category Card
+        return snapshot.data!.size > 0
+            ? CourseCategoryCard(
+                subtitle: widget.subtitleType,
+                snapshot: snapshot,
+                ref: reference)
+            : const NoDataFound();
+      },
     );
   }
 }
