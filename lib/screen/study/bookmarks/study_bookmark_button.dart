@@ -11,8 +11,8 @@ class StudyBookmarkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('Study_Temp')
-            .doc('2nd Year')
+            .collection('Study_BookMarks')
+            .doc('Users')
             .collection(FirebaseAuth.instance.currentUser!.uid)
             .snapshots(),
         builder: (context, snapshot) {
@@ -77,8 +77,8 @@ class _StudyBookmarkScreenState extends State<StudyBookmarkScreen> {
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('Study_Temp')
-                .doc('2nd Year')
+                .collection('Study_Bookmarks')
+                .doc('Users')
                 .collection(FirebaseAuth.instance.currentUser!.uid)
                 .snapshots(),
             builder: (context, snapshot) {
@@ -126,8 +126,8 @@ class _StudyBookmarkScreenState extends State<StudyBookmarkScreen> {
                             child: InkWell(
                                 borderRadius: BorderRadius.circular(32),
                                 onTap: () => FirebaseFirestore.instance
-                                        .collection('Study_Temp')
-                                        .doc('2nd Year')
+                                        .collection('Study_Bookmarks')
+                                        .doc('Users')
                                         .collection(FirebaseAuth
                                             .instance.currentUser!.uid)
                                         .doc(data.id.toString())
