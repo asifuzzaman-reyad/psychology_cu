@@ -11,7 +11,7 @@ class StudyBookmarkButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection('Study_BookMarks')
+            .collection('Study_Bookmarks')
             .doc('Users')
             .collection(FirebaseAuth.instance.currentUser!.uid)
             .snapshots(),
