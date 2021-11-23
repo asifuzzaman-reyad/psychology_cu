@@ -96,8 +96,8 @@ class _CourseCategoryCardState extends State<CourseCategoryCard> {
                         onTap: () async {
                           var userId = FirebaseAuth.instance.currentUser!.uid;
                           FirebaseFirestore.instance
-                              .collection("Study_Temp")
-                              .doc("2nd Year")
+                              .collection("Study_Bookmarks")
+                              .doc("Users")
                               .collection(userId)
                               .doc(document.id)
                               .set({
