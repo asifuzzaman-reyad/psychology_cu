@@ -14,7 +14,12 @@ class StudyScreen extends StatefulWidget {
   _StudyScreenState createState() => _StudyScreenState();
 }
 
-class _StudyScreenState extends State<StudyScreen> {
+class _StudyScreenState extends State<StudyScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  //var
   String batch = '';
   String year = '';
 
@@ -23,6 +28,9 @@ class _StudyScreenState extends State<StudyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //for automatic keep alive
+    super.build(context);
+
     return Scaffold(
       // backgroundColor: Colors.white,
       appBar: AppBar(

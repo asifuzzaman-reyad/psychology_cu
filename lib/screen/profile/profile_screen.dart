@@ -17,7 +17,11 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   // firebase user
   var userRef = FirebaseFirestore.instance
       .collection('Users')
@@ -29,6 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //for automatic keep alive
+    super.build(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(

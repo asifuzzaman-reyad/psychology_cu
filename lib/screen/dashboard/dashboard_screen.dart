@@ -14,47 +14,64 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  late int _selectedPageIndex;
+  late PageController _pageController;
 
-  int _currentIndex = 0;
-  final List _pages = [
+  final List<Widget> _pages = [
     const HomeScreen(),
     const StudyScreen(),
     const ProfileScreen()
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _selectedPageIndex = 0;
+    _pageController = PageController(initialPage: _selectedPageIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            label: 'Study',
-            icon: Icon(Icons.school),
-          ),
-          BottomNavigationBarItem(
-            label: 'Profile',
-            icon: Icon(Icons.person),
-          ),
-        ],
-        selectedItemColor: Colors.deepOrange,
-        selectedFontSize: 14,
-        unselectedFontSize: 12,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-      ),
-      body: _pages[_currentIndex],
-    );
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 16,
+          items: const [
+            BottomNavigationBarItem(
+              label: 'Home',
+              icon: Icon(Icons.home),
+            ),
+            BottomNavigationBarItem(
+              label: 'Study',
+              icon: Icon(Icons.school),
+            ),
+            BottomNavigationBarItem(
+              label: 'Profile',
+              icon: Icon(Icons.person),
+            ),
+          ],
+          selectedItemColor: Colors.deepOrange,
+          selectedFontSize: 13,
+          currentIndex: _selectedPageIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedPageIndex = index;
+              // jump to next page
+              _pageController.jumpToPage(index);
+            });
+          },
+        ),
+
+        // dashboard body
+        body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          children: _pages,
+        ));
   }
 }
