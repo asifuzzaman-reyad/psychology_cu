@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
+import 'package:psy_assistant/admob/ad_state.dart';
+import 'package:psy_assistant/admob/my_banner_ad.dart';
 
 import '/constants.dart';
 import 'components/course_card.dart';
@@ -18,6 +22,25 @@ class _StudyScreenState extends State<StudyScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  // banner init
+  late BannerAd banner;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adState = Provider.of<AdState>(context);
+    adState.initialization.then((status) {
+      setState(() {
+        banner = BannerAd(
+          adUnitId: adState.bannerAdUnitId,
+          size: AdSize.banner,
+          request: const AdRequest(),
+          listener: adState.bannerAdListener,
+        )..load();
+      });
+    });
+  }
 
   //var
   String batch = '';
@@ -123,6 +146,9 @@ class _StudyScreenState extends State<StudyScreen>
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             //major course
             CourseCard(year: selectedYear ?? year, courseType: 'Major Course'),
+
+            //banner ad
+            MyBannerAd(banner: banner, enableMargin: true),
 
             // related course
             CourseCard(
