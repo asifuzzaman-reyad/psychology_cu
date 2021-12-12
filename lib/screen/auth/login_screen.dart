@@ -164,8 +164,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         setState(() => loading = false);
         Fluttertoast.showToast(msg: 'Login Successful');
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()));
+        Navigator.pushNamedAndRemoveUntil(
+            context, DashboardScreen.routeName, (route) => false);
       } else {
         setState(() => loading = false);
         print('No user found');

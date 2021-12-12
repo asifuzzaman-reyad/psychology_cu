@@ -18,11 +18,13 @@ class CourseCategoryCard extends StatefulWidget {
   const CourseCategoryCard({
     key,
     required this.subtitle,
+    required this.courseCode,
     required this.snapshot,
     this.ref,
   }) : super(key: key);
 
   final String subtitle;
+  final String courseCode;
   final AsyncSnapshot<QuerySnapshot> snapshot;
   final CollectionReference? ref;
 
@@ -80,6 +82,11 @@ class _CourseCategoryCardState extends State<CourseCategoryCard> {
                 date: document.get('date'),
                 fileUrl: document.get('fileUrl'));
 
+            //
+
+            var userId = FirebaseAuth.instance.currentUser!.uid;
+
+            //
             return Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
@@ -89,30 +96,88 @@ class _CourseCategoryCardState extends State<CourseCategoryCard> {
                 alignment: Alignment.topRight,
                 children: [
                   //bookmark icon
-                  Tooltip(
-                    message: 'Bookmark',
-                    child: InkWell(
-                        borderRadius: BorderRadius.circular(32),
-                        onTap: () async {
-                          var userId = FirebaseAuth.instance.currentUser!.uid;
-                          FirebaseFirestore.instance
-                              .collection("Study_Bookmarks")
-                              .doc("Users")
-                              .collection(userId)
-                              .doc(document.id)
-                              .set({
-                            'title': courses.title,
-                            'fileUrl': courses.fileUrl,
-                          }).whenComplete(() {
-                            //
-                            Fluttertoast.cancel();
-                            Fluttertoast.showToast(msg: 'Add to bookmark');
-                          });
-                        },
-                        child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: const Icon(Icons.bookmarks))),
-                  ),
+                  StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection("Study_Bookmarks")
+                          .doc("Users")
+                          .collection(userId)
+                          .doc(document.id)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Text('');
+                        }
+
+                        if (snapshot.data!.exists) {
+                          return IconButton(
+                              onPressed: () async {
+                                await FirebaseFirestore.instance
+                                    .collection('Study_Bookmarks')
+                                    .doc('Users')
+                                    .collection(userId)
+                                    .doc(document.id)
+                                    .delete()
+                                    .whenComplete(() {
+                                  Fluttertoast.cancel();
+                                  Fluttertoast.showToast(
+                                      msg: 'Delete bookmark');
+                                });
+                              },
+                              icon: const Icon(Icons.bookmark_remove,
+                                  color: Colors.red));
+                        }
+
+                        return IconButton(
+                            onPressed: () async {
+                              var userId =
+                                  FirebaseAuth.instance.currentUser!.uid;
+                              FirebaseFirestore.instance
+                                  .collection("Study_Bookmarks")
+                                  .doc("Users")
+                                  .collection(userId)
+                                  .doc(document.id)
+                                  .set({
+                                'courseCode': widget.courseCode,
+                                'title': courses.title,
+                                'subtitle': courses.subtitle,
+                                'fileUrl': courses.fileUrl,
+                              }).whenComplete(() {
+                                //
+                                Fluttertoast.cancel();
+                                Fluttertoast.showToast(msg: 'Add bookmark');
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.bookmark_added,
+                            ));
+                      }),
+
+                  // Tooltip(
+                  //   message: 'Bookmark',
+                  //   child: InkWell(
+                  //       borderRadius: BorderRadius.circular(32),
+                  //       onTap: () async {
+                  //         var userId = FirebaseAuth.instance.currentUser!.uid;
+                  //         FirebaseFirestore.instance
+                  //             .collection("Study_Bookmarks")
+                  //             .doc("Users")
+                  //             .collection(userId)
+                  //             .doc(document.id)
+                  //             .set({
+                  //           'courseCode': widget.courseCode,
+                  //           'title': courses.title,
+                  //           'subtitle': courses.subtitle,
+                  //           'fileUrl': courses.fileUrl,
+                  //         }).whenComplete(() {
+                  //           //
+                  //           Fluttertoast.cancel();
+                  //           Fluttertoast.showToast(msg: 'Add to bookmark');
+                  //         });
+                  //       },
+                  //       child: Container(
+                  //           padding: const EdgeInsets.all(10),
+                  //           child: const Icon(Icons.bookmarks))),
+                  // ),
 
                   //
                   Container(

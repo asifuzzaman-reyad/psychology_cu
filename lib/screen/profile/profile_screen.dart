@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                                     ),
                                   ),
 
-                                  const SizedBox(width: 8),
+                                  const SizedBox(width: 10),
 
                                   // mobile, email, hall
                                   Column(

@@ -123,6 +123,7 @@ class _StudyScreenListState extends State<StudyScreenList> {
         return snapshot.data!.size > 0
             ? CourseCategoryCard(
                 subtitle: widget.subtitleType,
+                courseCode: widget.courseCode,
                 snapshot: snapshot,
                 ref: reference)
             : const NoDataFound();

@@ -115,8 +115,6 @@ class _StudyCategoryScreenStateNotes extends State<StudyScreenListNotes> {
         actions: const [
           // study bookmark
           StudyBookmarkButton(),
-
-          SizedBox(width: 8),
         ],
       ),
       body: RefreshIndicator(
@@ -144,6 +142,7 @@ class _StudyCategoryScreenStateNotes extends State<StudyScreenListNotes> {
         return snapshot.data!.size > 0
             ? CourseCategoryCard(
                 subtitle: widget.subtitle,
+                courseCode: widget.courseCode,
                 snapshot: snapshot,
                 ref: reference,
               )

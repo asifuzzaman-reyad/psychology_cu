@@ -37,8 +37,6 @@ class _StudyScreenDetailsState extends State<StudyScreenDetails> {
           actions: const [
             // study bookmark
             StudyBookmarkButton(),
-
-            SizedBox(width: 8),
           ],
 
           // tab
